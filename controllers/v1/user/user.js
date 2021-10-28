@@ -40,26 +40,28 @@ async function createBot (req, res, next) {
         //const tournament = await TournmentModel.findOne({_id: req.body.id});
         //let totalBots = tournament.totalBots;
         //let username = Math.floor(Math.random() * 300000000);
+        console.log(req.body.number);
         let gender = ['Male', 'Female'];
         let botType = ['MustWin', 'FairPlay'];
+        let bots = [];
 
-
-        for(i=0; i<20; i++) {
-            let username = randomstring.generate();
-            console.log(username)
-            const bots = new BotsModel({
+        if(req.body.number){
+            for(i=0; i<req.body.number; i++) {
+            let username = randomstring.generate(8);
+            const bot = new BotsModel({
                 userName: `bb${username}`,
                 isBot: true,
                 botType: botType[Math.floor(Math.random() * botType.length)],
                 botAvailability: 'Available',
                 gender: gender[Math.floor(Math.random() * gender.length)],
+                email: `${randomstring.generate()}@gmail.com`
             });
-            await bots.save();
-            console.log(bots)
-            res.json({
-                message: 'bots created',
-                data: bots
-            });
+            console.log(bot);
+            const botObject = { insertOne :
+                {
+                   "document" :bot}
+                }
+            bots.push(botObject);
         
 
     //     let data = [{
@@ -86,8 +88,15 @@ async function createBot (req, res, next) {
     //         console.log(ans);
     //     });
     }
-        
-            
+
+    //console.log(bots);
+    await BotsModel.bulkWrite(bots);
+            console.log(bots)
+            res.json({
+                message: 'bots created',
+                data: bots
+            });    
+        }
         
     } catch (err) {
         errors.handleException(err, next);

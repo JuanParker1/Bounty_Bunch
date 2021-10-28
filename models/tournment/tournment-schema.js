@@ -50,40 +50,66 @@ let fields = {
     rules: {
         type: String
     },
-    tourStartDateAndTime: {
+    tourStartDate: {
+        type: Date
+    },
+    tourEndTime: {
+        type: Date
+    },
+    regStartDate: {
         type: Date,
         default: new Date()
     },
-    tourEndDateAndTime: {
+    regStartTime: {
+        type: String,
+        default: new Date().getTime()
+    },
+    startDate: {
         type: Date,
         default: new Date()
     },
-    regStartDateAndTime: {
-        type: Date,
-        default: new Date()
+    startTime: {
+        type: String,
+        default: new Date().getTime()
     },
-    regEndDateAndTime: {
-        type: Date,
-        default: new Date()
+    endDate: {
+        type: Date
+    },
+    endTime: {
+        type: String
     },
     mode:{
         type: String
     },
-    alternateTourStartDateAndTime: {
+    alternateTourStartDate: {
         type: Date,
         default: new Date()
     },
-    alternateTourEndDateAndTime: {
+    alternateTourStartTime: {
+        type: String,
+        default: new Date().getTime()
+    },
+    alternateRegStartDate: {
         type: Date,
         default: new Date()
     },
-    alternateRegStartDateAndTime: {
+    alternateRegStartTime: {
+        type: String,
+        default: new Date().getTime()
+    },
+    alternateRegenddate: {
+        type: Date
+    },
+    alternateRegendtime: {
+        type: String
+    },
+    alternateDate: {
         type: Date,
         default: new Date()
     },
-    alternateRegEndDateAndTime: {
-        type: Date,
-        default: new Date()
+    alternateTime: {
+        type: String,
+        default: new Date().getTime()
     },
     
     section: {
@@ -98,7 +124,16 @@ let fields = {
         default: 'Fixed',
         required: false
     },
+    botAlternate: {
+        type: String,
+        enum: 'Bots|Alternate|Fixed'.split('|'),
+        default: 'Fixed',
+        required: false
+    },
     bots: {
+        type: String
+    },
+    activestatus: {
         type: String
     },
     bonus: {

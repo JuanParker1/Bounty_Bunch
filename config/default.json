@@ -4,7 +4,7 @@
         "tokenLife": 7200
     },
     "mongoose": {
-        "uri": "mongodb+srv://admin:EZ4nBUSTTC6Zmrrd@cluster0.9n3ns.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+        "uri": "mongodb+srv://bountybunch:blK8hLRJOI4ZcfrC@bbunch.bxa2q.mongodb.net/BBunch?retryWrites=true&w=majority",
         "options": {
             "useNewUrlParser": true,
             "useUnifiedTopology": true,

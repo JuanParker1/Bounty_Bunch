@@ -26,6 +26,9 @@ const BotsSchema = mongoose.Schema({
     enable:{
         type:Boolean,
         default: true
+    },
+    email:{
+        type: String
     }
 });
 

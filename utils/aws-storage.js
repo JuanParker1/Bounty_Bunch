@@ -14,7 +14,7 @@ module.exports = {
 async function awsStorageCreate(file, destFileName) {
   console.log("name", file.type);
   let type = file.type.split('/')[1];
-  let uploadParams = { Bucket: 'bountybunch', Key: destFileName+'.'+type, Body: '' };
+  let uploadParams = { Bucket: 'gameadminimages', Key: destFileName+'.'+type, Body: '' };
   let rawData = fs.readFileSync(file.path);
   // rawData.on('error', function (err) {
   //     console.log('File Error', err);
