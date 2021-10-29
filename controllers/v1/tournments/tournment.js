@@ -8,6 +8,7 @@ module.exports = {
     createTournment,
     getTournments,
     getTournmentById,
+    getTournmentByTournamentId,
     getTournmentsBySection,
     deleteTournment,
     editTournment,
@@ -139,6 +140,15 @@ async function getTournmentById(req, res, next) {
     }
 }
 
+async function getTournmentByTournamentId(req, res, next) {
+    try {
+        res.data = await TournmentModel.findOne({ _id: req.params.id }).exec();
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
+    }
+}
+
 async function deleteTournment(req, res, next) {
     try {
         if (!req.params.id) {
@@ -151,33 +161,25 @@ async function deleteTournment(req, res, next) {
     }
 }
 async function editTournment(req, res, next) {
+
+    console.log(req);
+    let tournment = await TournmentModel.findOne({ _id: req.params.id }).exec();
+    if(tournment)
     try {
-        if (!req.parmas.id) {
+        if (!tournment.id) {
             throw new ValidationError("enter valid tournment id");
         }
-        let tournment = await TournmentModel.findOne({ _id: req.params.id }).exec();
-
-        console.log('tournment'+tournment);
-        tournment.attempts = req.body.attempts;
-        tournment.tableImage = req.body.tableImage;
-        tournment.noOfAttempts = req.body.noOfAttempts;
-        tournment.description = req.body.description;
-        tournment.rules = req.body.rules;
-        tournment.alternateTourStartDate = req.body.alternateTourStartDate;
-        tournment.alternateTourStartTime = req.body.alternateTourStartTime;
-        tournment.alternateRegStartDate = req.body.alternateRegStartDate;
-        tournment.alternateRegStartTime = req.body.alternateRegStartTime;
-        tournment.alternateRegenddate = req.body.alternateRegenddate;
-        tournment.alternateRegendtime = req.body.alternateRegendtime;
-        tournment.alternateDate = req.body.alternateDate;
-        tournment.alternateTime = req.body.alternateTime;
-        tournment.autoCreate = req.body.autoCreate;
-        tournment.enable = req.body.enable;
-        tournment.botsActivation = req.body.botsActivation;
-        tournment.minPlayer = req.body.minPlayer;
-        console.log('tournment'+tournment);
-        res.data = await tournment.save();
-        next();
+        res.data = await TournmentModel.updateOne(
+            { "_id": req.params.id}, // Filter
+                  {$set: {"description": req.body.description,
+                "rules": req.body.rules}}, // Update
+                  {upsert: true} // add document with req.body._id if not exists 
+        ).then((result) => {
+               console.log(result.body)
+             }).catch((error) => {
+               console.log(error)
+             });
+             next();
     } catch (ex) {
         errors.handleException(ex, next);
     }

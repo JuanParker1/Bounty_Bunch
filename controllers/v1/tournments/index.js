@@ -14,6 +14,12 @@ module.exports = [
         controller: tournmentController.getTournmentById
     },
     {
+        path: '/:id/get-tournment-by-tournamentId',
+        method: 'get',
+        public: true,
+        controller: tournmentController.getTournmentByTournamentId
+    },
+    {
         path: '/:id/get-tournments-by-section',
         method: 'get',
         public: true,
@@ -26,7 +32,7 @@ module.exports = [
         controller: tournmentController.getTournments
     },
     {
-        path: '/:id/edit',
+        path: '/:id/edit-tournament',
         method: 'put',
         allUsers: true,
         controller: tournmentController.editTournment
