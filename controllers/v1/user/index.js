@@ -25,6 +25,12 @@ module.exports = [
         controller: userController.createBot
     },
     {
+        path: "/get-bot",
+        method: "get",
+        allUsers: true,
+        controller: userController.getBots
+    },
+    {
         path: "/",
         method: "get",
         allUsers: true,

@@ -10,6 +10,7 @@ const TournmentModel = require('../../../models/tournment');
 module.exports = {
     createUser,
     getUsers,
+    getBots,
     updatePassword,
     self,
     getSubAdmin,
@@ -100,6 +101,15 @@ async function createBot (req, res, next) {
         
     } catch (err) {
         errors.handleException(err, next);
+    }
+}
+
+async function getBots(req, res, next) {
+    try {
+        res.data = await BotsModel.find({isBot: true}).exec();
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
     }
 }
 
