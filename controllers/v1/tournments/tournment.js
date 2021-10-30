@@ -75,6 +75,7 @@ async function createTournment(req, res, next) {
         tournment.fairPlayBots = req.body.fairPlayBots;
         tournment.mustWinBots = req.body.mustWinBots;
         tournment.minPlayer = req.body.minPlayer;
+        tournment.prizeData = req.body.prizeData;
 
         console.log('User Id', req.user)
         res.data = TournmentModel.createTournment(tournment, req.user._id);

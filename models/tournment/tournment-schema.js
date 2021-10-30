@@ -169,6 +169,9 @@ let fields = {
     },
     minPlayer: {
         type: Number
+    },
+    prizeData : {
+        type: Array
     }
 };
 
