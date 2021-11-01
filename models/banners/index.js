@@ -9,6 +9,8 @@ let BannerModel = mongoose.model('banner', BannerSchema);
 module.exports = BannerModel;
 
 async function createBanners(data, requestUser) {
+    data.gameCategory = data.gameCategory === "" ? null : data.gameCategory;
+    data.gameName = data.gameName === "" ? null : data.gameName
     let banner = new BannerModel(data);
     banner.createdBy = requestUser;
     return await banner.save();

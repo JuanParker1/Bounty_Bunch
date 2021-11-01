@@ -11,17 +11,23 @@ let fields = {
         enum: 'Inactive|Active'.split('|'),
         default: 'Active'
     },
+    enable: {
+        type: Boolean,
+        default: true
+    },
     gameCategory: {
         type: ObjectId,
         ref: 'gameCategory',
+        required:false
     },
     gameName: {
         type: ObjectId,
-        ref: 'game'
+        ref: 'game',
+        required:false
     },
-    banner: [{
-        type: String
-    }]
+    banners: {
+        type: Array
+    }
 };
 
 let Schema = require('utils/generate-schema')(fields);
