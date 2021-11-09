@@ -46,13 +46,17 @@ async function createBot (req, res, next) {
         let botType = ['MustWin', 'FairPlay'];
         let bots = [];
 
+        const counter = eq.body.number *30 /100;
+
         if(req.body.number){
             for(i=0; i<req.body.number; i++) {
             let username = randomstring.generate(8);
+            const type = i > counter ? botType[1] : botType[0];
             const bot = new BotsModel({
                 userName: `bb${username}`,
                 isBot: true,
-                botType: botType[Math.floor(Math.random() * botType.length)],
+
+                botType: type,
                 botAvailability: 'Available',
                 gender: gender[Math.floor(Math.random() * gender.length)],
                 email: `${randomstring.generate()}@gmail.com`
