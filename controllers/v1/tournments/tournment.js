@@ -7,9 +7,11 @@ const UserModel = mongoose.model('user');
 module.exports = {
     createTournment,
     getTournments,
+    getTournmentByTableName,
     getTournmentById,
     getTournmentByTournamentId,
     getTournmentsBySection,
+    getTournmentsByGameId,
     deleteTournment,
     editTournment,
     enableDisableTournment,
@@ -109,6 +111,16 @@ async function getTournments(req, res, next) {
     }
 }
 
+async function getTournmentByTableName(req, res, next) {
+    try {
+        res.data = await TournmentModel.find({tableName: req.params.tableName}).exec();
+        console.log(res.data);
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
+    }
+}
+
 async function getTournmentsBySection(req, res, next) {
     try {
         let query = {};
@@ -121,6 +133,16 @@ async function getTournmentsBySection(req, res, next) {
         }
         console.log(query);
         res.data = await TournmentModel.find(query).exec();
+        console.log(res.data)
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
+    }
+}
+
+async function getTournmentsByGameId(req, res, next) {
+    try {
+        res.data = await TournmentModel.find({gameId: req.params.id}).exec();
         console.log(res.data)
         next();
     } catch (ex) {

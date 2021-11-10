@@ -26,10 +26,22 @@ module.exports = [
         controller: tournmentController.getTournmentsBySection
     },
     {
+        path: '/:id/get-tournments-by-gameId',
+        method: 'get',
+        public: true,
+        controller: tournmentController.getTournmentsByGameId
+    },
+    {
         path: '/get-tournments',
         method: 'get',
         public: true,
         controller: tournmentController.getTournments
+    },
+    {
+        path: '/get-tournments-by-table-name/:tableName',
+        method: 'get',
+        public: true,
+        controller: tournmentController.getTournmentByTableName
     },
     {
         path: '/:id/edit-tournament',
