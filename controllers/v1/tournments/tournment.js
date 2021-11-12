@@ -129,7 +129,8 @@ async function getTournmentsBySection(req, res, next) {
             query.gameId = req.query.gameId;
         }
         else {
-            query.section = 'Tournment'
+            query.section = 'Tournment',
+            query.gameId = req.query.gameId;
         }
         console.log(query);
         res.data = await TournmentModel.find(query).populate('gameId').exec();
