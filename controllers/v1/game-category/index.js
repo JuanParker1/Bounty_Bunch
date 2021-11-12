@@ -20,6 +20,12 @@ module.exports = [
         controller: categoryController.getCategoriesById
     },
     {
+        path: '/:name/get-game-category-by-name',
+        method: 'get',
+        allUsers: true,
+        controller: categoryController.getCategoriesByName
+    },
+    {
         path: '/:id/delete-category',
         method: 'delete',
         allUsers: true,

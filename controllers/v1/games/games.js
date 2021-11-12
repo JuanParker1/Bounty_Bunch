@@ -8,6 +8,7 @@ module.exports = {
     createGame,
     getGames,
     getGameById,
+    getGamesByName,
     gameResults,
     deleteGame,
     getSinglePlayerGames,
@@ -71,6 +72,14 @@ async function getMultiPlayerGames(req, res, next) {
 async function getGameById(req, res, next) {
     try {
         res.data = await GameModel.findOne({ _id: req.params.id }).populate('gameCategory').lean().exec();
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
+    }
+}
+async function getGamesByName(req, res, next) {
+    try {
+        res.data = await GameModel.find({ gameName: req.params.name }).populate('gameCategory').lean().exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);

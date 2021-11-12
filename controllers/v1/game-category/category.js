@@ -10,7 +10,8 @@ module.exports = {
     deleteCategories,
     enableDisableCategories,
     editGameCategory,
-    getCategoriesById
+    getCategoriesById,
+    getCategoriesByName
 
 };
 
@@ -89,6 +90,18 @@ async function getCategoriesById(req, res, next) {
             throw new validationError("Send Valid Id")
         }
         res.data = await CategoryModel.findOne({ _id: req.params.id }).exec();
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
+    }
+}
+
+async function getCategoriesByName(req, res, next) {
+    try {
+        if (!req.params.name) {
+            throw new validationError("Send Valid Name")
+        }
+        res.data = await CategoryModel.find({ name: req.params.name }).exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);

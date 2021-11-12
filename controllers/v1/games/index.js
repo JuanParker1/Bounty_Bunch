@@ -14,6 +14,12 @@ module.exports = [
         controller: gameController.getGames
     },
     {
+        path: '/get-games-by-name/:name',
+        method: 'get',
+        public: true,
+        controller: gameController.getGamesByName
+    },
+    {
         path: '/get-games-id-name',
         method: 'get',
         public: true,
