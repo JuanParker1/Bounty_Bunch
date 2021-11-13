@@ -38,7 +38,7 @@ module.exports = [
         controller: tournmentController.getTournments
     },
     {
-        path: '/get-tournments-by-table-name/:tableName',
+        path: '/get-tournments-by-table-name',
         method: 'get',
         public: true,
         controller: tournmentController.getTournmentByTableName

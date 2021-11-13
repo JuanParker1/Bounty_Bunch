@@ -113,8 +113,15 @@ async function getTournments(req, res, next) {
 
 async function getTournmentByTableName(req, res, next) {
     try {
-        res.data = await TournmentModel.find({tableName: req.params.tableName}).exec();
-        console.log(res.data);
+        let query = {};
+        if (req.query.tableName) {
+            query.tableName = req.query.tableName;
+            query.gameId = req.query.gameId;
+        }
+        else {
+            query.gameId = req.query.gameId;
+        }
+        res.data = await TournmentModel.find(query).populate('gameId').exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -129,12 +136,9 @@ async function getTournmentsBySection(req, res, next) {
             query.gameId = req.query.gameId;
         }
         else {
-            query.section = 'Tournment',
             query.gameId = req.query.gameId;
         }
-        console.log(query);
         res.data = await TournmentModel.find(query).populate('gameId').exec();
-        console.log(res.data)
         next();
     } catch (ex) {
         errors.handleException(ex, next);
