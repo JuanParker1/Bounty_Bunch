@@ -79,7 +79,7 @@ async function createTournment(req, res, next) {
         tournment.minPlayer = req.body.minPlayer;
         tournment.prizeData = req.body.prizeData;
 
-        console.log('User Id', req.user)
+        console.log(tournment)
         res.data = TournmentModel.createTournment(tournment, req.user._id);
         next();
     } catch (ex) {

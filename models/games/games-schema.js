@@ -19,10 +19,6 @@ let fields = {
     rules: {
         type: String
     },
-    // tournment: {
-    //     type: String,
-    //     required: false
-    // },
     description: {
         type: String
     },
@@ -56,6 +52,19 @@ let fields = {
     enable:{
         type:Boolean,
         default: true
+    },
+    apkUrl: {
+        type: String,
+        default: 'no-url'
+    },
+    apkVersion: {
+        type: String,
+        default: '0.00'
+    },
+    applicationType: {
+        type: String,
+        enum: 'Apk'.split('|'),
+        default: 'Apk'
     }
 };
 

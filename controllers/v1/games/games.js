@@ -3,6 +3,9 @@ const GameModel = mongoose.model('game');
 const errors = require('errors/index');
 const validationError = errors.ValidationError;
 const UserModel = mongoose.model('user');
+var awsStorageCreate = require('utils/aws-storage');
+var formidable = require('formidable');
+const uuid = require('uuid');
 
 module.exports = {
     createGame,
@@ -25,6 +28,14 @@ async function createGame(req, res, next) {
         //     throw new validationError("Can be Created By Sub Admin");
         // }
         console.log(req.user._id);
+        var form = new formidable.IncomingForm();
+        form.parse(req, function (error, fields, files) {
+            let fileId = uuid.v4();
+            let filename = `${fileId}`;
+            console.log("files:", files);
+            let data = awsStorageCreate(files.files, filename);
+            console.log(data);
+        });
         res.data = await GameModel.createGame(req.body, req.user._id);
         next();
     } catch (ex) {
@@ -71,6 +82,7 @@ async function getMultiPlayerGames(req, res, next) {
 
 async function getGameById(req, res, next) {
     try {
+        console.log("test")
         res.data = await GameModel.findOne({ _id: req.params.id }).populate('gameCategory').lean().exec();
         next();
     } catch (ex) {
@@ -144,7 +156,7 @@ async function editGame(req, res, next) {
         gameData.bundleIdentifier = req.body.bundleIdentifier;
         gameData.type = req.body.type;
         gameData.gameType = req.body.gameType;
-        if(req.body.icon){
+        if (req.body.icon) {
             gameData.icon = req.body.icon;
         }
         res.data = await gameData.save();
