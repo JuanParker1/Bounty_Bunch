@@ -46,7 +46,7 @@ async function createBot (req, res, next) {
         let botType = ['MustWin', 'FairPlay'];
         let bots = [];
 
-        const counter = eq.body.number *30 /100;
+        const counter = req.body.number *30 /100;
 
         if(req.body.number){
             for(i=0; i<req.body.number; i++) {
