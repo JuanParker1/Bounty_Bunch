@@ -2,11 +2,11 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 var path = require('path');
 
-const s3 = new AWS.S3({
-  region: 'ap-south-1',
-  accessKeyId: "AKIAUHGCFUEZLQTCXGWO",
-  secretAccessKey: "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"
-});
+// const s3 = new AWS.S3({
+//   region: 'ap-south-1',
+//   accessKeyId: "AKIAUHGCFUEZLQTCXGWO",
+//   secretAccessKey: "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"
+// });
 
 // async function awsStorageCreate(file, destFileName) {
 //   console.log("name", file.type);
