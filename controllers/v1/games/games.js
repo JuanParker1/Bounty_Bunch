@@ -3,9 +3,8 @@ const GameModel = mongoose.model('game');
 const errors = require('errors/index');
 const validationError = errors.ValidationError;
 const UserModel = mongoose.model('user');
-var awsStorageCreate = require('utils/aws-storage');
+const { awsStorageCreate } = require('../../../utils/aws-storage');
 var formidable = require('formidable');
-const uuid = require('uuid');
 
 module.exports = {
     createGame,
@@ -28,15 +27,16 @@ async function createGame(req, res, next) {
         //     throw new validationError("Can be Created By Sub Admin");
         // }
         console.log(req.user._id);
-        var form = new formidable.IncomingForm();
-        form.parse(req, function (error, fields, files) {
-            let fileId = uuid.v4();
-            let filename = `${fileId}`;
+        var form = await new formidable.IncomingForm();
+        form.parse(req, async (error, fields, files) => {
             console.log("files:", files);
-            let data = awsStorageCreate(files.files, filename);
-            console.log(data);
+            const gameDetails = JSON.parse(fields.data)
+            console.log(gameDetails);
+            gameDetails.icon = files.file_path.path
+            //let data = await awsStorageCreate(files.file_path);
+            //console.log(data);
+            res.data = await GameModel.createGame(gameDetails, req.user._id);
         });
-        res.data = await GameModel.createGame(req.body, req.user._id);
         next();
     } catch (ex) {
         errors.handleException(ex, next);
