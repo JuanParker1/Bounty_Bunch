@@ -12,8 +12,8 @@
         }
     },
     "aws":{
-        "AWS_ACCESS_KEY": "AKIAUQHY3HU5LDMUSMH3",
-        "AWS_SECRET_KEY" : "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"
+        "AWS_ACCESS_KEY": "AKIAYHB5H3RQUI6PBELB",
+        "AWS_SECRET_KEY" : "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"
     },
     "env": "development"
 }

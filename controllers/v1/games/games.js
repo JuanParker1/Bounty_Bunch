@@ -3,7 +3,7 @@ const GameModel = mongoose.model('game');
 const errors = require('errors/index');
 const validationError = errors.ValidationError;
 const UserModel = mongoose.model('user');
-const { awsStorageCreate } = require('../../../utils/aws-storage');
+const { awsStorageUploadImage, awsStorageUploadApk } = require('../../../utils/aws-storage');
 var formidable = require('formidable');
 
 module.exports = {
@@ -29,12 +29,19 @@ async function createGame(req, res, next) {
         console.log(req.user._id);
         var form = await new formidable.IncomingForm();
         form.parse(req, async (error, fields, files) => {
-            console.log("files:", files);
+            //console.log("files:", files);
             const gameDetails = JSON.parse(fields.data)
-            console.log(gameDetails);
-            gameDetails.icon = files.file_path.path
-            //let data = await awsStorageCreate(files.file_path);
-            //console.log(data);
+            //console.log(gameDetails);
+            let data = await awsStorageUploadImage(files.file_path2);
+            console.log(data);
+            gameDetails.icon = data
+
+            if (files.file_path) {
+
+                let data2 = await awsStorageUploadApk(files.file_path);
+                console.log(data2);
+                gameDetails.apkUrl = data2
+            }
             res.data = await GameModel.createGame(gameDetails, req.user._id);
         });
         next();

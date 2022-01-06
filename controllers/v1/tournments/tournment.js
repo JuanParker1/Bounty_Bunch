@@ -23,7 +23,6 @@ async function createTournment(req, res, next) {
         // if (!await UserModel.isSubAdmin(req.user._id)) {
         //     throw validationError("can created by subadmin")
         // }
-        console.log("here:", req.body);
         //res.data = TournmentModel.createTournment(req.body);
         // console.log('User Id', req.user)
         let tournment = {};
@@ -38,7 +37,7 @@ async function createTournment(req, res, next) {
         tournment.minPlayer = req.body.minPlayer;
         tournment.gameId = req.body.gameId;
         tournment.section = req.body.section;
-        tournment.tableName =req.body.tableName;
+        tournment.tableName = req.body.tableName;
         tournment.entryFee = req.body.entryFee;
         tournment.winningAmount = req.body.winningAmount;
         tournment.adminStake = req.body.adminStake;
@@ -79,8 +78,60 @@ async function createTournment(req, res, next) {
         tournment.minPlayer = req.body.minPlayer;
         tournment.prizeData = req.body.prizeData;
 
-        console.log(tournment)
-        res.data = TournmentModel.createTournment(tournment, req.user._id);
+        if (tournment.mode === 'Both' && tournment.types !== 'Both') {
+
+            tournment.mode = 'Free';
+            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
+
+            TournmentModel.createTournment(tournment, req.user._id);
+
+            tournment.mode = 'Paid';
+            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
+            res.data = TournmentModel.createTournment(tournment, req.user._id);
+
+        }
+        else if (tournment.mode !== 'Both' && tournment.types === 'Both') {
+
+            tournment.mode = 'Free';
+            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
+
+            TournmentModel.createTournment(tournment, req.user._id);
+
+            tournment.mode = 'Paid';
+            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
+            res.data = TournmentModel.createTournment(tournment, req.user._id);
+
+
+        }
+        else if (tournment.mode === 'Both' && tournment.types === 'Both') {
+
+            tournment.mode = 'Free';
+            tournment.types = 'Public'
+            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
+
+            TournmentModel.createTournment(tournment, req.user._id);
+
+            tournment.mode = 'Free';
+            tournment.types = 'Private'
+            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
+
+            TournmentModel.createTournment(tournment, req.user._id);
+
+            tournment.mode = 'Paid';
+            tournment.types = 'Public'
+            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
+            res.data = TournmentModel.createTournment(tournment, req.user._id);
+
+            tournment.mode = 'Paid';
+            tournment.types = 'Private'
+            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
+            res.data = TournmentModel.createTournment(tournment, req.user._id);
+
+
+        }
+        else {
+            res.data = TournmentModel.createTournment(tournment, req.user._id);
+        }
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -90,7 +141,7 @@ async function createTournment(req, res, next) {
 async function createBots(req, res, next) {
     try {
         console.log("bots", req.body)
-        
+
         res.data = TournmentModel.createBots(req.body, req.user._id);
         next();
     } catch (err) {
@@ -147,7 +198,7 @@ async function getTournmentsBySection(req, res, next) {
 
 async function getTournmentsByGameId(req, res, next) {
     try {
-        res.data = await TournmentModel.find({gameId: req.params.id}).exec();
+        res.data = await TournmentModel.find({ gameId: req.params.id }).exec();
         console.log(res.data)
         next();
     } catch (ex) {
@@ -192,25 +243,29 @@ async function editTournment(req, res, next) {
 
     console.log(req);
     let tournment = await TournmentModel.findOne({ _id: req.params.id }).exec();
-    if(tournment)
-    try {
-        if (!tournment.id) {
-            throw new ValidationError("enter valid tournment id");
+    if (tournment)
+        try {
+            if (!tournment.id) {
+                throw new ValidationError("enter valid tournment id");
+            }
+            res.data = await TournmentModel.updateOne(
+                { "_id": req.params.id }, // Filter
+                {
+                    $set: {
+                        "description": req.body.description,
+                        "rules": req.body.rules
+                    }
+                }, // Update
+                { upsert: true } // add document with req.body._id if not exists 
+            ).then((result) => {
+                console.log(result.body)
+            }).catch((error) => {
+                console.log(error)
+            });
+            next();
+        } catch (ex) {
+            errors.handleException(ex, next);
         }
-        res.data = await TournmentModel.updateOne(
-            { "_id": req.params.id}, // Filter
-                  {$set: {"description": req.body.description,
-                "rules": req.body.rules}}, // Update
-                  {upsert: true} // add document with req.body._id if not exists 
-        ).then((result) => {
-               console.log(result.body)
-             }).catch((error) => {
-               console.log(error)
-             });
-             next();
-    } catch (ex) {
-        errors.handleException(ex, next);
-    }
 }
 
 async function enableDisableTournment(req, res, next) {

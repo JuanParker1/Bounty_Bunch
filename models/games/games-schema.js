@@ -57,9 +57,19 @@ let fields = {
         type: String,
         default: 'no-url'
     },
-    apkVersion: {
+    html5Url: {
+        type: String,
+        default: 'no-url'
+    },
+    version: {
         type: String,
         default: '0.00'
+    },
+    activityName: {
+        type: String
+    },
+    packageName: {
+        type: String
     },
     applicationType: {
         type: String,

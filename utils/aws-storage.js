@@ -2,11 +2,11 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 var path = require('path');
 
-// const s3 = new AWS.S3({
-//   region: 'ap-south-1',
-//   accessKeyId: "AKIAUHGCFUEZLQTCXGWO",
-//   secretAccessKey: "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"
-// });
+const s3 = new AWS.S3({
+  region: 'ap-south-1',
+  accessKeyId: "AKIAYHB5H3RQUI6PBELB",
+  secretAccessKey: "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"
+});
 
 // async function awsStorageCreate(file, destFileName) {
 //   console.log("name", file.type);
@@ -62,7 +62,7 @@ var path = require('path');
 //   // return awsUpload.Location;
 // }
 
-const awsStorageCreate = async (file) => {
+const awsStorageUploadImage = async (file) => {
   var urlLink = '';
 
   var uploadParams = { Bucket: 'gameadminimages', Key: '', Body: '' };
@@ -83,6 +83,71 @@ const awsStorageCreate = async (file) => {
   return urlLink.Location;
 }
 
+const awsStorageUploadApk = async (file) => {
+  var urlLink = '';
+
+  var uploadParams = { Bucket: 'bountybunch-apk-bucket', Key: '', Body: '' };
+
+  var fileStream = fs.createReadStream(file.path);
+  fileStream.on('error', function (err) {
+    console.log('File Error', err);
+  });
+
+  uploadParams.Body = fileStream;
+  uploadParams.Key = path.basename(`${file.path}_${file.name}`);
+
+  // call S3 to retrieve upload file to specified bucket
+  urlLink = await s3.upload(uploadParams).promise();
+
+  console.log(urlLink)
+
+  return urlLink.Location;
+}
+
+//call S3 to create the bucket
+const createS3Bucket = async () => {
+  
+  try {
+      // Create the parameters for calling createBucket
+      var bucketParams = {
+          Bucket: 'bountybunch-apk-bucket'
+      };
+
+      // call S3 to create the bucket
+      s3.createBucket(bucketParams, function (err, data) {
+          if (err) {
+              console.log("Error", err);
+          } else {
+              console.log("Success", data.Location);
+          }
+      });
+  } catch (err) {
+      console.log("Error", err);
+  }
+};
+
+const listBuckets = async () => {
+  var datas = [];
+  try {
+      // Call S3 to list the buckets
+      s3.listBuckets(function (err, data) {
+          if (err) {
+              console.log("Error", err);
+          } else {
+              console.log("Success", data.Buckets);
+              datas = data.Buckets
+          }
+      });
+      console.log("Success", datas);
+      return datas
+  } catch (err) {
+      console.log("Error", err);
+  }
+};
+
 module.exports = {
-  awsStorageCreate
+  awsStorageUploadImage,
+  awsStorageUploadApk,
+  listBuckets,
+  createS3Bucket
 }

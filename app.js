@@ -1,4 +1,5 @@
 require('app-module-path').addPath(__dirname);
+//const { listBuckets, createS3Bucket } = require('./utils/aws-storage');
 
 const express = require('express');
 const config = require('config');
@@ -21,7 +22,8 @@ function startApp() {
 };
 
 require('bootstrap/db')(config, eventEmitter);
-
+//listBuckets()
+//createS3Bucket()
 eventEmitter.on('db-connection-established', function () {
     startApp();
 });
