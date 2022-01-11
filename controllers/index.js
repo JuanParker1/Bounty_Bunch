@@ -44,7 +44,7 @@ module.exports = function (app, config) {
     _(routes).forEach(function (route) {
         switch (route.method) {
             case 'get':
-                router.get(route.path, access(route), sentHeaders, route.controller);
+                router.get(route.path, sentHeaders, route.controller);
                 break;
             case 'post':
                 router.post(route.path, access(route), sentHeaders, route.controller);
