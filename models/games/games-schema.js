@@ -30,7 +30,7 @@ let fields = {
     },
     type: {
         type: String,
-        enum: 'Free|Paid'.split('|'),
+        enum: 'Free|Paid|Both'.split('|'),
         default: 'Free'
     },
     noOfParticipants: {
