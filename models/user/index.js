@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 let UserSchema = require('./user-schema');
+let userGame = require('./usergame-schema');
 const randomstring = require('randomstring');
 const crypto = require('crypto');
 const moment = require('moment');
@@ -19,24 +20,15 @@ UserSchema.methods = {
 };
 let UserModel = mongoose.model('user', UserSchema);
 
-module.exports = UserModel;
+module.exports = { UserModel };
 
 async function getUserById(id) {
     return await UserModel.findOne({ _id: id }).exec();
 }
 
 async function createUser(userData) {
-    let RoleModel = mongoose.model('role');
-    let user = new UserModel(userData);
-    let role = await RoleModel.findOne({ name: userData.userType }).exec();
-    user.fullName = user.firstName + " " + user.lastName;
-    user.set('role', [role._id]);
-    user.phoneNumber = String(userData.phoneNumber);
-    if (userData.password) {
-        user.set('password', userData.password);
-    } else {
-        setPassword(user);
-    }
+    let user = new userGame(userData);
+    console.log('user')
     return await user.save();
 
 }

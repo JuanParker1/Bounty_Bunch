@@ -33,10 +33,3 @@ const BotsSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Bots', BotsSchema);
-
-//let Schema = require('utils/generate-schema')(fields);
-
-//Schema.index({ email: 1 }, { background: true });
-//Schema.index({ email: 1, fullName: 1, role: 1 }, { background: true });
-//Schema.index({ phoneNumber: 1 }, { background: true });
-

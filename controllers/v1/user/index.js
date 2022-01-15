@@ -1,89 +1,113 @@
-const userController = require('./user');
+const {
+    CreateBot,
+    CreateBulkBot,
+    GetBots
+} = require('../../../services/bots')
+
+const {
+    CreateSubAdmin,
+    GetSubAdmins,
+    GetSubAdminById,
+    EnableDisableSubAdmin,
+    EditSubAdmin
+} = require('../../../services/subAdmin')
 module.exports = [
-    {
-        path: "/",
-        method: "post",
-        public: true,
-        controller: userController.createUser
-    },
+    // {
+    //     path: "/",
+    //     method: "post",
+    //     public: true,
+    //     controller: userController.createUser
+    //},
     {
         path: "/create-sub-admin",
         method: "post",
         allUsers: true,
-        controller: userController.createUser
-    },
-    {
-        path: "/create-player",
-        method: "post",
-        public: true,
-        controller: userController.createUser
-    },
-    {
-        path: "/create-bot",
-        method: "post",
-        public: true,
-        controller: userController.createBot
-    },
-    {
-        path: "/get-bot",
-        method: "get",
-        allUsers: true,
-        controller: userController.getBots
-    },
-    {
-        path: "/",
-        method: "get",
-        allUsers: true,
-        controller: userController.getUsers
-    },
-    {
-        path: "/set-password",
-        method: "put",
-        public: true,
-        controller: userController.updatePassword
-    },
-
-    {
-        path: "/self",
-        method: "get",
-        allUsers: true,
-        controller: userController.self
+        controller: CreateSubAdmin
     },
     {
         path: "/get-sub-admin",
         method: "get",
         allUsers: true,
-        controller: userController.getSubAdmin
+        controller: GetSubAdmins
     },
     {
         path: "/:id/get-subadmin-by-id",
         method: "get",
         allUsers: true,
-        controller: userController.getSubAdminById
-    },
-    {
-        path: "/get-user-analytics",
-        method: "get",
-        allUsers: true,
-        controller: userController.getUserAnalytics
-    },
-    {
-        path: "/:id/get-user-logs",
-        method: "get",
-        allUsers: true,
-        controller: userController.getUserLogs
+        controller: GetSubAdminById
     },
     {
         path: '/:id/enable-disable-sub-admin',
         method: 'put',
         allUsers: true,
-        controller: userController.enableDisableSubAdmin
+        controller: EnableDisableSubAdmin
     },
     {
         path: '/:id/edit-sub-admin',
         method: 'put',
         allUsers: true,
-        controller: userController.editSubAdmin
-    }
+        controller: EditSubAdmin
+    },
+    // {
+    //     path: "/create-player",
+    //     method: "post",
+    //     public: true,
+    //     controller: userController.createUser
+    // },
+    {
+        path: "/create-bots",
+        method: "post",
+        public: true,
+        controller: CreateBulkBot
+    },
+    {
+        path: "/create-bot",
+        method: "post",
+        public: true,
+        controller: CreateBot
+    },
+    {
+        path: "/get-bot",
+        method: "get",
+        allUsers: true,
+        controller: GetBots
+    },
+    // {
+    //     path: "/",
+    //     method: "get",
+    //     allUsers: true,
+    //     controller: userController.getUsers
+    // },
+    // {
+    //     path: "/getUser/:userId",
+    //     method: "get",
+    //     allUsers: true,
+    //     controller: userController.getUsersById
+    // },
+    // {
+    //     path: "/set-password",
+    //     method: "put",
+    //     public: true,
+    //     controller: userController.updatePassword
+    // },
+
+    // {
+    //     path: "/self",
+    //     method: "get",
+    //     allUsers: true,
+    //     controller: userController.self
+    // },
+    // {
+    //     path: "/get-user-analytics",
+    //     method: "get",
+    //     allUsers: true,
+    //     controller: userController.getUserAnalytics
+    // },
+    // {
+    //     path: "/:id/get-user-logs",
+    //     method: "get",
+    //     allUsers: true,
+    //     controller: userController.getUserLogs
+    // },
 
 ];

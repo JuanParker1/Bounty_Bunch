@@ -1,5 +1,7 @@
+const axios = require("axios");
 let mongoose = require('mongoose');
-let UserModel = mongoose.model('user');
+let { UserModel } = mongoose.model('user');
+const { userGame } = require('../../../models/user/usergame-schema');
 let BotsModel = require('../../../models/bots/bots')
 let errors = require('errors/index');
 let validationError = errors.ValidationError;
@@ -10,6 +12,7 @@ const TournmentModel = require('../../../models/tournment');
 module.exports = {
     createUser,
     getUsers,
+    getUsersById,
     getBots,
     updatePassword,
     self,
@@ -36,7 +39,7 @@ async function createUser(req, res, next) {
     }
 }
 
-async function createBot (req, res, next) { 
+async function createBot(req, res, next) {
     try {
         //const tournament = await TournmentModel.findOne({_id: req.body.id});
         //let totalBots = tournament.totalBots;
@@ -46,63 +49,65 @@ async function createBot (req, res, next) {
         let botType = ['MustWin', 'FairPlay'];
         let bots = [];
 
-        const counter = req.body.number *30 /100;
+        const counter = req.body.number * 30 / 100;
 
-        if(req.body.number){
-            for(i=0; i<req.body.number; i++) {
-            let username = randomstring.generate(8);
-            const type = i > counter ? botType[1] : botType[0];
-            const bot = new BotsModel({
-                userName: `bb${username}`,
-                isBot: true,
+        if (req.body.number) {
+            for (i = 0; i < req.body.number; i++) {
+                let username = randomstring.generate(8);
+                const type = i > counter ? botType[1] : botType[0];
+                const bot = new BotsModel({
+                    userName: `bb${username}`,
+                    isBot: true,
 
-                botType: type,
-                botAvailability: 'Available',
-                gender: gender[Math.floor(Math.random() * gender.length)],
-                email: `${randomstring.generate()}@gmail.com`
-            });
-            console.log(bot);
-            const botObject = { insertOne :
-                {
-                   "document" :bot}
+                    botType: type,
+                    botAvailability: 'Available',
+                    gender: gender[Math.floor(Math.random() * gender.length)],
+                    email: `${randomstring.generate()}@gmail.com`
+                });
+                console.log(bot);
+                const botObject = {
+                    insertOne:
+                    {
+                        "document": bot
+                    }
                 }
-            bots.push(botObject);
-        
+                bots.push(botObject);
 
-    //     let data = [{
-    //         userName: `bb${username}`,
-    //         isBot: true,
-    //         botType: botType[Math.floor(Math.random() * botType.length)],
-    //         botAvailability: 'Available',
-    //         gender: gender[Math.floor(Math.random() * gender.length)],
-    //     }];
 
-    //     let botsArr = [];
+                //     let data = [{
+                //         userName: `bb${username}`,
+                //         isBot: true,
+                //         botType: botType[Math.floor(Math.random() * botType.length)],
+                //         botAvailability: 'Available',
+                //         gender: gender[Math.floor(Math.random() * gender.length)],
+                //     }];
 
-    //     data.forEach(datanum => {
-    //         botsArr.push({
-    //         userName: `bb${username}`,
-    //         isBot: datanum.true,
-    //         botType: datanum.botType[Math.floor(Math.random() * botType.length)],
-    //         botAvailability: 'Available',
-    //         gender: datanum.gender[Math.floor(Math.random() * gender.length)],
-    //         })
-    //     });
+                //     let botsArr = [];
 
-    //     await BotsModel.insertMany(botsArr, ans => {
-    //         console.log(ans);
-    //     });
-    }
+                //     data.forEach(datanum => {
+                //         botsArr.push({
+                //         userName: `bb${username}`,
+                //         isBot: datanum.true,
+                //         botType: datanum.botType[Math.floor(Math.random() * botType.length)],
+                //         botAvailability: 'Available',
+                //         gender: datanum.gender[Math.floor(Math.random() * gender.length)],
+                //         })
+                //     });
 
-    //console.log(bots);
-    await BotsModel.bulkWrite(bots);
+                //     await BotsModel.insertMany(botsArr, ans => {
+                //         console.log(ans);
+                //     });
+            }
+
+            //console.log(bots);
+            await BotsModel.bulkWrite(bots);
             console.log(bots)
             res.json({
                 message: 'bots created',
                 data: bots
-            });    
+            });
         }
-        
+
     } catch (err) {
         errors.handleException(err, next);
     }
@@ -110,7 +115,7 @@ async function createBot (req, res, next) {
 
 async function getBots(req, res, next) {
     try {
-        res.data = await BotsModel.find({isBot: true}).exec();
+        res.data = await BotsModel.find({ isBot: true }).exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -121,6 +126,40 @@ async function getUsers(req, res, next) {
     try {
         let role = await mongoose.model('role').findOne({ name: 'Admin' }).exec();
         res.data = await UserModel.find({ role: { $nin: [role._id] } }).exec();
+        next();
+    } catch (ex) {
+        errors.handleException(ex, next);
+    }
+}
+
+async function getUsersById(req, res, next) {
+    try {
+        const user = await userGame.findById(req.params.userId);
+        console.log(user);
+
+        const body = {
+            _id: req.params.userId
+        };
+
+        const url = "http://3.20.92.220:3000/api/v1/BBusers/userDetails";
+        const responseData = await axios.post(url, body);
+
+        console.log(responseData.data.data[0]);
+
+        if (user) {
+
+            delete responseData.data.data[0]._id;
+            res.data = await userGame.updateOne(
+                { _id: responseData.data.data[0]._id },
+                {
+                    $set: responseData.data.data[0],
+                }
+            );
+        }
+        else {
+            res.data = await userGame.createUser(responseData.data.data[0]);
+        }
+
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -267,14 +306,14 @@ async function enableDisableSubAdmin(req, res, next) {
 
 async function editSubAdmin(req, res, next) {
     try {
-        if(!req.params.id){
+        if (!req.params.id) {
             throw new validationError("enter valid id")
         }
         let userData = await UserModel.findOne({ _id: req.params.id }).exec();
         userData.firstName = req.body.firstName;
         userData.lastName = req.body.lastName;
         userData.fullName = userData.firstName + " " + userData.lastName;
-        if(req.body.password){
+        if (req.body.password) {
             await UserModel.updatePassword(req.body.phoneNumber, req.body.password);
         }
         userData.address = req.body.address;

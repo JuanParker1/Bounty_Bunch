@@ -1,29 +1,34 @@
-const bannerController = require('./banners');
+const {
+  CreateBanners,
+  GetBanners,
+  DeleteBanner,
+  EnableDisableBanners,
+} = require("../../../services/banner");
 
 module.exports = [
-    {
-        path: '/',
-        method: 'post',
-        allUsers: true,
-        controller: bannerController.createBanners
-    },
+  {
+    path: "/",
+    method: "post",
+    allUsers: true,
+    controller: CreateBanners,
+  },
 
-    {
-        path: '/get-banners',
-        method: 'get',
-        allUsers: true,
-        controller: bannerController.getBanners
-    },
-    {
-        path: '/:id/delete',
-        method: 'delete',
-        allUsers: true,
-        controller: bannerController.deleteBanner
-    },
-    {
-        path: '/:id/enable-disable-banner',
-        method: 'put',
-        allUsers: true,
-        controller: bannerController.enableDisableBanners
-    },
-]
+  {
+    path: "/get-banners",
+    method: "get",
+    allUsers: true,
+    controller: GetBanners,
+  },
+  {
+    path: "/:id/delete",
+    method: "delete",
+    allUsers: true,
+    controller: DeleteBanner,
+  },
+  {
+    path: "/:id/enable-disable-banner",
+    method: "put",
+    allUsers: true,
+    controller: EnableDisableBanners,
+  },
+];

@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.ObjectId;
 
-let fields = {
+let fields = mongoose.Schema({
     bannerType: {
         type: String,
         enum: 'GameCategory|GameList'.split('|')
@@ -28,11 +28,6 @@ let fields = {
     banners: {
         type: Array
     }
-};
+});
 
-let Schema = require('utils/generate-schema')(fields);
-
-
-Schema.index({ gameCategory: 1, gameName: 1 }, { background: true });
-
-module.exports = Schema;
+module.exports = mongoose.model("Banner", fields);
