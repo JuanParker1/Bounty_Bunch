@@ -11,6 +11,11 @@ const {
     EnableDisableSubAdmin,
     EditSubAdmin
 } = require('../../../services/subAdmin')
+
+const {
+    GetUsersById,
+    GetallUsers
+} = require('../../../services/gameUser')
 module.exports = [
     // {
     //     path: "/",
@@ -78,12 +83,18 @@ module.exports = [
     //     allUsers: true,
     //     controller: userController.getUsers
     // },
-    // {
-    //     path: "/getUser/:userId",
-    //     method: "get",
-    //     allUsers: true,
-    //     controller: userController.getUsersById
-    // },
+    {
+        path: "/getUser/:userId",
+        method: "get",
+        allUsers: true,
+        controller: GetUsersById
+    },
+    {
+        path: "/getUsers",
+        method: "get",
+        allUsers: true,
+        controller: GetallUsers
+    },
     // {
     //     path: "/set-password",
     //     method: "put",

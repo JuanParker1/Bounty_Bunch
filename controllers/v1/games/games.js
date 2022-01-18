@@ -1,56 +1,58 @@
-const mongoose = require('mongoose');
-const GameModel = mongoose.model('game');
-const errors = require('errors/index');
+const mongoose = require("mongoose");
+const GameModel = mongoose.model("game");
+const errors = require("errors/index");
 const validationError = errors.ValidationError;
-const UserModel = mongoose.model('user');
-const { awsStorageUploadImage, awsStorageUploadApk } = require('../../../utils/aws-storage');
-var formidable = require('formidable');
+const UserModel = mongoose.model("user");
+const {
+  awsStorageUploadImage,
+  awsStorageUploadApk,
+} = require("../../../utils/aws-storage");
+var formidable = require("formidable");
 
 module.exports = {
-    createGame,
-    getGames,
-    getGameById,
-    getGamesByName,
-    gameResults,
-    deleteGame,
-    getSinglePlayerGames,
-    getMultiPlayerGames,
-    getGamesIdName,
-    getGamesByCategory,
-    enableDisableGames,
-    editGame
+  createGame,
+  getGames,
+  getGameById,
+  getGamesByName,
+  gameResults,
+  deleteGame,
+  getSinglePlayerGames,
+  getMultiPlayerGames,
+  getGamesIdName,
+  getGamesByCategory,
+  enableDisableGames,
+  editGame,
 };
 
 async function createGame(req, res, next) {
-    try {
-        // if (!await UserModel.isSubAdmin(req.user._id)) {
-        //     throw new validationError("Can be Created By Sub Admin");
-        // }
-        //console.log(req.user._id);
-        var form = await new formidable.IncomingForm();
-        form.parse(req, async (error, fields, files) => {
-            //console.log("files:", files);
-            const gameDetails = JSON.parse(fields.data)
-            console.log(gameDetails);
-            let data = await awsStorageUploadImage(files.file_path2);
-            console.log(data);
-            gameDetails.icon = data
+  try {
+    // if (!await UserModel.isSubAdmin(req.user._id)) {
+    //     throw new validationError("Can be Created By Sub Admin");
+    // }
+    //console.log(req.user._id);
+    var form = await new formidable.IncomingForm();
+    form.parse(req, async (error, fields, files) => {
+      //console.log("files:", files);
+      const gameDetails = JSON.parse(fields.data);
+      console.log(gameDetails);
+      let data = await awsStorageUploadImage(files.file_path2);
+      console.log(data);
+      gameDetails.icon = data;
 
-            if (files.file_path) {
-
-                let data2 = await awsStorageUploadApk(files.file_path);
-                console.log(data2);
-                gameDetails.apkUrl = data2
-            }
-            res.data = await GameModel.createGame(gameDetails, req.user._id);
-        });
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
-    }
+      if (files.file_path) {
+        let data2 = await awsStorageUploadApk(files.file_path);
+        console.log(data2);
+        gameDetails.apkUrl = data2;
+      }
+      res.data = await GameModel.createGame(gameDetails, req.user._id);
+    });
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
 }
 
-async function getGames(req, res, next) {
+/* async function getGames(req, res, next) {
     try {
         let query = {};
         if (req.query.status !== 'null') {
@@ -61,136 +63,144 @@ async function getGames(req, res, next) {
     } catch (ex) {
         errors.handleException(ex, next);
     }
-}
-async function getGamesIdName(req, res, next) {
+} */
+/* async function getGamesIdName(req, res, next) {
     try {
         res.data = await GameModel.find({}).select('_id gameName').lean().exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
     }
-}
-async function getSinglePlayerGames(req, res, next) {
+} */
+/* async function getSinglePlayerGames(req, res, next) {
     try {
         res.data = await GameModel.find({ gameType: 'SinglePlayer' }).populate('gameCategory').lean().exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
     }
+} */
+/* async function getMultiPlayerGames(req, res, next) {
+  try {
+    res.data = await GameModel.find({ gameType: "MultiPlayer" })
+      .populate("gameCategory")
+      .lean()
+      .exec();
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
+
+/* async function getGameById(req, res, next) {
+  try {
+    console.log("test");
+    res.data = await GameModel.findOne({ _id: req.params.id })
+      .populate("gameCategory")
+      .lean()
+      .exec();
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
+/* async function getGamesByName(req, res, next) {
+  try {
+    res.data = await GameModel.find({ gameName: req.params.name })
+      .populate("gameCategory")
+      .lean()
+      .exec();
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
 }
-async function getMultiPlayerGames(req, res, next) {
-    try {
-        res.data = await GameModel.find({ gameType: 'MultiPlayer' }).populate('gameCategory').lean().exec();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
+ */
+/* async function gameResults(req, res, next) {
+  try {
+    res.data = await GameModel.gameResults(req.params.id, req.body);
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
+
+/* async function deleteGame(req, res, next) {
+  try {
+    if (!req.params.id) {
+      throw new validationError("enter valid id");
     }
-}
+    res.data = await GameModel.remove({ _id: req.params.id }).exec();
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
 
-async function getGameById(req, res, next) {
-    try {
-        console.log("test")
-        res.data = await GameModel.findOne({ _id: req.params.id }).populate('gameCategory').lean().exec();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
+/* async function getGamesByCategory(req, res, next) {
+  try {
+    if (!req.params.id) {
+      throw new validationError("enter valid categoryId");
     }
-}
-async function getGamesByName(req, res, next) {
-    try {
-        res.data = await GameModel.find({ gameName: req.params.name }).populate('gameCategory').lean().exec();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
+    res.data = await GameModel.find({ gameCategory: req.params.id }).exec();
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
+
+/* async function enableDisableGames(req, res, next) {
+  try {
+    if (!req.params.id) {
+      throw new validationError("enter valid id");
     }
-}
+    let gameData = await GameModel.findOne({ _id: req.params.id }).exec();
+    gameData.gameStatus = req.body.enable ? "Active" : "Inactive";
+    gameData.enable = req.body.enable;
+    res.data = await gameData.save();
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
 
-async function gameResults(req, res, next) {
-    try {
-        res.data = await GameModel.gameResults(req.params.id, req.body);
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
+/* async function editGame(req, res, next) {
+  try {
+    if (!req.params.id) {
+      throw new validationError("Send valid Id");
     }
-}
+    let gameData = await GameModel.findOne({ _id: req.params.id }).exec();
 
-async function deleteGame(req, res, next) {
-    try {
-        if (!req.params.id) {
-            throw new validationError("enter valid id");
-        }
-        res.data = await GameModel.remove({ _id: req.params.id }).exec();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
-    }
-}
+    var form = await new formidable.IncomingForm();
+    form.parse(req, async (error, fields, files) => {
+      //console.log("files:", files);
+      const gameDetails = JSON.parse(fields.data);
+      console.log(gameDetails);
+      if (files.file_path2) {
+        let data = await awsStorageUploadImage(files.file_path2);
+        console.log(data);
+        gameData.icon = data;
+      }
 
-async function getGamesByCategory(req, res, next) {
-    try {
-        if (!req.params.id) {
-            throw new validationError("enter valid categoryId");
-        }
-        res.data = await GameModel.find({ gameCategory: req.params.id }).exec();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
-    }
-}
+      if (files.file_path) {
+        let data2 = await awsStorageUploadApk(files.file_path);
+        console.log(data2);
+        gameData.apkUrl = data2;
+      }
+      gameData.version = gameDetails.version;
+      gameData.activityName = gameDetails.activityName;
+      gameData.packageName = gameDetails.packageName;
+      gameData.html5Url = gameDetails.html5Url;
 
-async function enableDisableGames(req, res, next) {
-    try {
-        if (!req.params.id) {
-            throw new validationError("enter valid id");
-        }
-        let gameData = await GameModel.findOne({ _id: req.params.id }).exec();
-        gameData.gameStatus = req.body.enable ? "Active" : "Inactive";
-        gameData.enable = req.body.enable;
-        res.data = await gameData.save();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
-    }
-}
+      gameData.description = gameDetails.description;
+      gameData.bundleIdentifier = gameDetails.bundleIdentifier;
+      gameData.type = gameDetails.type;
+      gameData.gameType = gameDetails.gameType;
 
-async function editGame(req, res, next) {
-    try {
-        if (!req.params.id) {
-            throw new validationError("Send valid Id");
-        }
-        let gameData = await GameModel.findOne({ _id: req.params.id }).exec();
-
-        var form = await new formidable.IncomingForm();
-        form.parse(req, async (error, fields, files) => {
-            //console.log("files:", files);
-            const gameDetails = JSON.parse(fields.data)
-            console.log(gameDetails);
-            if (files.file_path2) {
-                let data = await awsStorageUploadImage(files.file_path2);
-                console.log(data);
-                gameData.icon = data
-            }
-
-            if (files.file_path) {
-
-                let data2 = await awsStorageUploadApk(files.file_path);
-                console.log(data2);
-                gameData.apkUrl = data2
-            }
-            gameData.version = gameDetails.version;
-            gameData.activityName = gameDetails.activityName;
-            gameData.packageName = gameDetails.packageName;
-            gameData.html5Url = gameDetails.html5Url;
-
-            gameData.description = gameDetails.description;
-            gameData.bundleIdentifier = gameDetails.bundleIdentifier;
-            gameData.type = gameDetails.type;
-            gameData.gameType = gameDetails.gameType;
-
-            res.data = await gameData.save();
-        });
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
-    }
-}
+      res.data = await gameData.save();
+    });
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} */
