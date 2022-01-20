@@ -105,6 +105,35 @@ const EditSubAdmin = async (req, res, next) => {
   }
 };
 
+const Self = async (req, res, next) => {
+      let user = req.user.toObject();
+      let userLogs = await getUserById(req.user._id);
+      if (await IsAdmin(req.user._id)) {
+          console.log("admin:")
+          user.isAdmin = true;
+      }
+      if (await IsSubAdmin(req.user._id)) {
+          console.log("sub-admin:")
+          user.isSubAdmin = true;
+      }
+      if (await IsUser(req.user._id)) {
+          console.log("user:")
+          user.isUser = true;
+      }
+      if (!userLogs) {
+          userLogs = new userLogModel({
+              userId: req.user._id,
+              lastLoginDate: moment(),
+              logIn: moment()
+          });
+          await userLogs.save();
+      } else {
+          userLogs.logIn = moment();
+          await userLogs.save();
+      }
+      res.data = user;
+      next();
+  }
 const IsAdmin = async (userId) => {
   let user = await getUserById(userId);
   if (user.role) {
@@ -118,10 +147,35 @@ const IsAdmin = async (userId) => {
   return false;
 };
 
+const IsSubAdmin = async (userId) => {
+  let user = await getUserById(userId);
+  if (user.role) {
+      let RoleModel = mongoose.model('role');
+      let role = await RoleModel.findOne({ _id: user.role }).exec();
+      if (role.name === 'Sub-Admin') {
+          return true;
+      }
+  }
+  return false;
+}
+
+const IsUser = async (userId) => {
+  let user = await getUserById(userId);
+  if (user.role.length > 0 || user.role) {
+      let RoleModel = mongoose.model('role');
+      let role = await RoleModel.findOne({ _id: user.role }).exec();
+      if (role.name === 'User') {
+          return true;
+      }
+  }
+  return false
+}
+
 module.exports = {
   CreateSubAdmin,
   GetSubAdmins,
   GetSubAdminById,
   EnableDisableSubAdmin,
   EditSubAdmin,
+  Self
 };

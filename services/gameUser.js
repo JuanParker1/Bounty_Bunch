@@ -30,7 +30,7 @@ const GetUsersById = async (req, res, next) => {
     }
 }
 
-const GetallUsers = async () => {
+const GetAllUsers = async () => {
     try {
         res.data = await getallUser();
         next();
@@ -41,5 +41,5 @@ const GetallUsers = async () => {
 
 module.exports = {
     GetUsersById,
-    GetallUsers
+    GetAllUsers
 };

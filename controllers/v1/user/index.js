@@ -9,12 +9,13 @@ const {
     GetSubAdmins,
     GetSubAdminById,
     EnableDisableSubAdmin,
-    EditSubAdmin
+    EditSubAdmin,
+    Self
 } = require('../../../services/subAdmin')
 
 const {
     GetUsersById,
-    GetallUsers
+    GetAllUsers
 } = require('../../../services/gameUser')
 module.exports = [
     // {
@@ -93,7 +94,7 @@ module.exports = [
         path: "/getUsers",
         method: "get",
         allUsers: true,
-        controller: GetallUsers
+        controller: GetAllUsers
     },
     // {
     //     path: "/set-password",
@@ -102,12 +103,12 @@ module.exports = [
     //     controller: userController.updatePassword
     // },
 
-    // {
-    //     path: "/self",
-    //     method: "get",
-    //     allUsers: true,
-    //     controller: userController.self
-    // },
+    {
+        path: "/self",
+        method: "get",
+        allUsers: true,
+        controller: Self
+    },
     // {
     //     path: "/get-user-analytics",
     //     method: "get",
