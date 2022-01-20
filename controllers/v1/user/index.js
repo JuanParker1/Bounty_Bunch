@@ -10,7 +10,8 @@ const {
     GetSubAdminById,
     EnableDisableSubAdmin,
     EditSubAdmin,
-    Self
+    Self,
+    GetUserAnalytics
 } = require('../../../services/subAdmin')
 
 const {
@@ -105,16 +106,16 @@ module.exports = [
 
     {
         path: "/self",
-        method: "get",
+        method: "post",
         allUsers: true,
         controller: Self
     },
-    // {
-    //     path: "/get-user-analytics",
-    //     method: "get",
-    //     allUsers: true,
-    //     controller: userController.getUserAnalytics
-    // },
+    {
+        path: "/get-user-analytics",
+        method: "post",
+        allUsers: true,
+        controller: GetUserAnalytics
+    },
     // {
     //     path: "/:id/get-user-logs",
     //     method: "get",

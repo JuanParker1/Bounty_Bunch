@@ -42,7 +42,8 @@ module.exports = function (config) {
             done(null, tokenValue, refreshTokenValue, {
                 'expires_in': config.security.tokenLife,
                 'tokenId': token._id,
-                'isAdmin': data.isAdmin
+                'isAdmin': data.isAdmin,
+                'userId': data.userId
             });
         });
     };

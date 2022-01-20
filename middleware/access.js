@@ -48,7 +48,7 @@ module.exports = function access(route) {
             if (err) {
                 return next(err);
             }
-            console.log("user:", user);
+            //console.log("user:", user);
             if (!user) {
                 return next({ status: 401, message: 'Invalid credentials' });
             }
