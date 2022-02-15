@@ -1,5 +1,6 @@
 const {
   getGames,
+  getGamesByGameCategory,
   getGamesIdName,
   getSinglePlayerGames,
   getMultiPlayerGames,
@@ -53,6 +54,19 @@ const GetGames = async (req, res, next) => {
       query.gameStatus = req.query.status;
     }
     res.data = await getGames(query);
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+};
+
+const GetGamesByGameCategory = async (req, res, next) => {
+  try {
+    let query = {};
+    if (req.query.gameCategoryId) {
+      query.gameCategoryId = req.query.gameCategoryId;
+    }
+    res.data = await getGamesByGameCategory(req.query.gameCategoryId);
     next();
   } catch (ex) {
     errors.handleException(ex, next);
@@ -151,6 +165,7 @@ const EnableDisableGames = async (req, res, next) => {
 
 module.exports = {
   GetGames,
+  GetGamesByGameCategory,
   GetGamesIdName,
   GetSinglePlayerGames,
   GetMultiPlayerGames,

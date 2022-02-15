@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const CategoryModel = mongoose.model('gameCategory');
 const errors = require('errors/index');
+const { CostExplorer } = require('aws-sdk');
 const validationError = errors.ValidationError;
 const UserModel = mongoose.model('user');
 
@@ -30,10 +31,15 @@ async function createCategory(req, res, next) {
 async function getCategories(req, res, next) {
     try {
         let query = {};
-        if (req.query.status !== 'null') {
+        if (req.query.status) {
             query.status = req.query.status;
         }
+        else {
+            query.status = 'Active'
+        }
+        console.log(query)
         res.data = await CategoryModel.find(query).exec();
+        console.log(res.data)
         next();
     } catch (ex) {
         errors.handleException(ex, next);

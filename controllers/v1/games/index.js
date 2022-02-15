@@ -1,5 +1,6 @@
 const {
   GetGames,
+  GetGamesByGameCategory,
   GetGamesIdName,
   GetSinglePlayerGames,
   GetMultiPlayerGames,
@@ -11,17 +12,17 @@ const {
 } = require("../../../services/games");
 
 module.exports = [
-  // {
-  //   path: "/",
-  //   method: "post",
-  //   allUsers: true,
-  //   controller: gameController.createGame,
-  // },
   {
     path: "/get-games",
     method: "get",
     public: true,
     controller: GetGames,
+  },
+  {
+    path: "/get-games-by-game-category",
+    method: "get",
+    public: true,
+    controller: GetGamesByGameCategory,
   },
   {
     path: "/get-games-by-name/:name",
@@ -71,17 +72,5 @@ module.exports = [
     method: "delete",
     allUsers: true,
     controller: DeleteGame,
-  },
-  // {
-  //   path: "/:id/enable-disable-game",
-  //   method: "put",
-  //   allUsers: true,
-  //   controller: gameController.enableDisableGames,
-  // },
-  // {
-  //   path: "/:id/edit-game",
-  //   method: "put",
-  //   allUsers: true,
-  //   controller: gameController.editGame,
-  // },
+  }
 ];

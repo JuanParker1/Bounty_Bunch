@@ -1,5 +1,9 @@
 let errors = require('errors/index');
+
+const axios = require("axios");
+
 const { getUserById, createUser, updateUser, getallUser } = require("../mongoDB/gameUser");
+
 const GetUsersById = async (req, res, next) => {
     try {
         const user = await getUserById(req.params.userId);
@@ -30,11 +34,11 @@ const GetUsersById = async (req, res, next) => {
     }
 }
 
-const GetAllUsers = async () => {
+const GetAllUsers = async (req, res, next) => {
     try {
         res.data = await getallUser();
         next();
-    } catch (error) {
+    } catch (ex) {
         errors.handleException(ex, next);
     }
 };

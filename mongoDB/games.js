@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 const GameModel = mongoose.model("game");
 
-/* const createGame = async (gameDetails) => {
-  const game = new Games(gameDetails);
-  return Promise.resolve(await game.save());
-}; */
-
 const getGames = async (query) => {
   const data = await GameModel.find(query)
+    .populate("gameCategory")
+    .lean()
+    .exec();
+
+  return Promise.resolve(data);
+};
+
+const getGamesByGameCategory = async (gameCategoryId) => {
+  const data = await GameModel.find({gameCategory: gameCategoryId})
     .populate("gameCategory")
     .lean()
     .exec();
@@ -83,6 +87,7 @@ const enableDisableGames = async (req) => {
 
 module.exports = {
   getGames,
+  getGamesByGameCategory,
   getGamesIdName,
   getSinglePlayerGames,
   getMultiPlayerGames,

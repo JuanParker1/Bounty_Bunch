@@ -5,62 +5,62 @@ const Phone = require('models/subdocs/phone');
 
 let userGame = mongoose.Schema({
 
-    loc: Object,
-    current_location: Object,
-    name: String,
-    username: String,
-    email: String,
-    gender: String,
-    nationality: String,
-    bio: String,
-    address: String,
-    location1: String,
-    state: String,
-    isoCode: String,
-    city: String,
-    dynamicLocation: String,
-    blockStatus: Boolean,
-    blockReason: String,
-    blockedActivity: String,
-    referralCount: Number,
-    notificationStatus: Boolean,
-    profilePic: String,
-    profileCover: String,
-    status: String,
-    usertype: String,
-    liveStatus: String,
-    badge: String,
-    kyc: String,
-    isSignUpComplete: Number,
-    showMeByStatus: String,
-    profileStatus: String,
-    messageStatus: String,
-    emailFlag: Boolean,
-    phoneNumberFlag: Boolean,
-    nameFlag: Boolean,
-    locationFlag: Boolean,
-    is_bliss_bundle_package: Boolean,
-    extended_bliss_bundle_package_info: Object,
-    _id: ObjectId,
-    phoneNumber: String,
-    createdAt: String,
-    updatedAt: String,
-    __v: Number,
-    age: Number,
-    dob: String,
-    is_tweleve_plus: Boolean,
-    jwtToken: String,
-    password: String,
-    referralCode: String,
-    referredBy: String,
-    userNotificationToken: String,
-    connectsStatus: String,
-    dobStatus: String,
-    locationStatus: String,
-    bliss_bundle_package: '',
-    bliss_bundle_package_end_date: String,
-    bliss_bundle_package_info: Object,
-    chips: Number
+    loc: { type: Object },
+    current_location: { type: Object, },
+    name: { type: String },
+    username: { type: String },
+    email: { type: String },
+    gender: { type: String },
+    nationality: { type: String },
+    bio: { type: String },
+    address: { type: String },
+    location1: { type: String },
+    state: { type: String },
+    isoCode: { type: String },
+    city: { type: String },
+    dynamicLocation: { type: String },
+    blockStatus: { type: Boolean },
+    blockReason: { type: String },
+    blockedActivity: { type: String },
+    referralCount: { type: Number },
+    notificationStatus: { type: Boolean },
+    profilePic: { type: String },
+    profileCover: { type: String },
+    status: { type: String },
+    usertype: { type: String },
+    liveStatus: { type: String },
+    badge: { type: String },
+    kyc: { type: String },
+    isSignUpComplete: { type: Number },
+    showMeByStatus: { type: String },
+    profileStatus: { type: String },
+    messageStatus: { type: String },
+    emailFlag: { type: Boolean },
+    phoneNumberFlag: { type: Boolean },
+    nameFlag: { type: Boolean },
+    locationFlag: { type: Boolean },
+    is_bliss_bundle_package: { type: Boolean },
+    extended_bliss_bundle_package_info: { type: Object },
+    _id: { type: ObjectId },
+    phoneNumber: { type: String },
+    createdAt: { type: String },
+    updatedAt: { type: String },
+    __v: { type: Number },
+    age: { type: Number },
+    dob: { type: String },
+    is_tweleve_plus: { type: Boolean },
+    jwtToken: { type: String },
+    password: { type: String },
+    referralCode: { type: String },
+    referredBy: { type: String },
+    userNotificationToken: { type: String },
+    connectsStatus: { type: String },
+    dobStatus: { type: String },
+    locationStatus: { type: String },
+    bliss_bundle_package: { type: String, default: '' },
+    bliss_bundle_package_end_date: { type: String },
+    bliss_bundle_package_info: { type: Object },
+    chips: { type: Number }
 });
 
 let userData = mongoose.Schema({
@@ -82,8 +82,8 @@ let userData = mongoose.Schema({
     email: {
         type: String,
     },
-    moduleAccess:[{
-        type:ObjectId,
+    moduleAccess: [{
+        type: ObjectId,
         ref: 'game'
     }],
     department: {
@@ -96,13 +96,13 @@ let userData = mongoose.Schema({
         type: Address
     },
     isBot: {
-        type: Boolean,
+        type: { type: Boolean },
         default: false
     },
-    botType:{
+    botType: {
         type: String
     },
-    botAvailability:{
+    botAvailability: {
         type: String,
         enum: 'Available|Engaged'.split('|')
     },
@@ -126,16 +126,20 @@ let userData = mongoose.Schema({
         type: String,
         required: false
     },
-    userWallet:{
+    userWallet: {
         type: String,
         required: false
     },
-    enable:{
-        type:Boolean,
+    enable: {
+        type: Boolean,
         default: true
     }
 
 });
 
-module.exports = mongoose.model('userGame',userGame);
-module.exports = mongoose.model('userData',userData);
+const userGamee = mongoose.model('userGame', userGame);
+const userDataa = mongoose.model('userData', userData);
+
+module.exports = {
+    userGamee, userDataa
+}
