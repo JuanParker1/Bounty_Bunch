@@ -21,7 +21,9 @@ async function createCategory(req, res, next) {
         // if (!await UserModel.isAdmin(req.user._id) || !await UserModel.isSubAdmin(req.user._id) ) {
         //     throw new validationError("can created by subadmin")
         // }
-        res.data = CategoryModel.createCategory(req.body, req.user._id);
+        // res.data = CategoryModel.createCategory(req.body, req.user._id);
+        res.data = CategoryModel.createCategory(req.body);
+        console.log(res.body)
         next();
     } catch (ex) {
         errors.handleException(ex, next);

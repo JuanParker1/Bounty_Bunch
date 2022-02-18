@@ -7,7 +7,12 @@ module.exports = function (app, config) {
 
     app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
-    app.use(cors());
+    app.use(cors(
+        {
+            "origin": "*",
+            "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+        }
+    ));
 
     app.set('port', config.port || "4800");
 }
