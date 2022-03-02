@@ -50,9 +50,9 @@ const errors = require("./../errors/index");
 const GetGames = async (req, res, next) => {
   try {
     let query = {};
-    if (req.query.status !== "null") {
-      query.gameStatus = req.query.status;
-    }
+    // if (req.query.status !== 'undefined') {
+    //   query.gameStatus = req.query.status;
+    // }
     res.data = await getGames(query);
     next();
   } catch (ex) {
