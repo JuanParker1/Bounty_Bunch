@@ -89,15 +89,15 @@ router.post("/register", async (req, res) => {
 
 router.post ("/login",  async (req, res) => {
     try {
-        const { email, password } = req.body;
-        if (!email || !password) {
+        const { username, password } = req.body;
+        if (!username || !password) {
             return res.status(400).json({
                 error: true,
                 message: "Cannot authorize user.",
             });
         }
         //1. Find if any account with that email exists in DB
-        const admin = await adminAuthModel.findOne({ email: email });
+        const admin = await adminAuthModel.findOne({ username: username });
         // NOT FOUND - Throw error
         if (!admin) {
             return res.status(404).json({

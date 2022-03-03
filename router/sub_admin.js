@@ -116,7 +116,38 @@ router.get('/', verify.verifyTokenAndSuperAdmin, async (req, res) => {
             "reason": error.message
         });
     }
-})
+});
+
+// get subadmin by status
+router.get('/get-by-status', verify.verifyTokenAndSuperAdmin, async (req, res) => {
+    try {
+        const role = 'sub-admin';
+        const query = req.query.status;
+        // console.log("query", query);
+        const subAdmin = await adminAuthModel.find({ role: role, status: query });
+        // console.log('sub-admin', subAdmin);
+        if (subAdmin.error) {
+            // console.log("error fetching sub admin", subAdmin.error)
+            return res.status(400).json({
+                "error": true,
+                "message": subAdmin.error.message
+            })
+        }
+        return res.status(200).json({
+            "success": true,
+            "message": "Data Fetching Successfull",
+            "subAdmins": subAdmin
+        });
+
+    } catch (error) {
+        // console.error("error", error);
+        return res.status(500).json({
+            "error": true,
+            "message": "Something Went Wrong!",
+            "reason": error.message
+        });
+    }
+});
 
 // get subadmins by id
 router.get('/get/:id', verify.verifyTokenAndSuperAdmin, async (req, res) => {

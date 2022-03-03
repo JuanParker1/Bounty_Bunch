@@ -18,7 +18,7 @@ function sentHeaders(req, res, next) {
 module.exports = function (app, config) {
   app.use(requestLog.pre);
   app.use(requestParse.parse);
-  app.use(access());
+  // app.use(access());
 
   var dirs = commonFunction.getFolders(__dirname);
   var routes = [];
