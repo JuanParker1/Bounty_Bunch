@@ -20,7 +20,7 @@ module.exports = [
         controller: tournmentController.getTournmentByTournamentId
     },
     {
-        path: '/:id/get-tournments-by-section',
+        path: '/get-tournments-by-section',
         method: 'get',
         public: true,
         controller: tournmentController.getTournmentsBySection

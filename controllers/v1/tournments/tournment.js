@@ -181,15 +181,15 @@ async function getTournmentByTableName(req, res, next) {
 
 async function getTournmentsBySection(req, res, next) {
     try {
-        let query = {};
-        if (req.query.section !== 'null') {
-            query.section = req.query.section;
-            query.gameId = req.query.gameId;
-        }
-        else {
-            query.gameId = req.query.gameId;
-        }
-        res.data = await TournmentModel.find(query).populate('gameId').exec();
+        let query = { section: req.query.section };
+        // if (req.query.section !== 'null') {
+        //     query.section = req.query.section;
+        //     query.gameId = req.query.gameId;
+        // }
+        // else {
+        //     query.gameId = req.query.gameId;
+        // }
+        res.data = await TournmentModel.find(query).exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -208,11 +208,11 @@ async function getTournmentsByGameId(req, res, next) {
 
 async function getTournmentById(req, res, next) {
     try {
-        let query = { gameId: req.params.id };
-        if (req.query.status !== 'null') {
-            query.status = req.query.status;
-        }
-        res.data = await TournmentModel.find(query).populate('gameId').exec();
+        let query = { _id: req.params.id };
+        // if (req.query.status !== 'null') {
+        //     query.status = req.query.status;
+        // }
+        res.data = await TournmentModel.find(query).exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
