@@ -8,6 +8,7 @@ const getGames = async (query) => {
     .exec();
 
   return Promise.resolve(data);
+  // return res.data = data;
 };
 
 const getGamesByGameCategory = async (gameCategoryId) => {

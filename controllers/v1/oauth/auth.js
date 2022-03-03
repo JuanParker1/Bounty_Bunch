@@ -7,9 +7,11 @@ const moment = require('moment');
 
 module.exports = {
     logout: async function (req, res, next) {
+        console.log("auth req", req);
         const authorization = req.get('authorization');
         const accessToken = authorization.split(" ")[1];
         let userLogs = await userLogModel.findOne({ userId: req.user._id }).exec();
+        console.log("userlogs", userLogs);
         let token = await AccessToken.findOne({
             token: accessToken
         }).exec(function (err, token) {

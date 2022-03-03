@@ -14,5 +14,8 @@ module.exports = function (app, config) {
         }
     ));
 
+    app.use("/api/admin", require('../router/admin_auth'));
+    app.use("/api/sub-admin", require('../router/sub_admin'));
+
     app.set('port', config.port || "4800");
 }

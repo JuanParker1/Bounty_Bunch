@@ -12,13 +12,13 @@ function sentHeaders(req, res, next) {
     return next("route");
   }
 
-  return next();
+  next();
 }
 
 module.exports = function (app, config) {
   app.use(requestLog.pre);
   app.use(requestParse.parse);
-  // app.use(access());
+  app.use(access());
 
   var dirs = commonFunction.getFolders(__dirname);
   var routes = [];
@@ -57,7 +57,7 @@ module.exports = function (app, config) {
   });
   app.use("/", router);
 
-  app.use(requestLog.post);
+  // app.use(requestLog.post);
 
   app.use(function postHandler(req, res, next) {
     if (req.route && req.route.path) {

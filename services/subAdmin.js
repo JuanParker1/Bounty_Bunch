@@ -4,7 +4,7 @@ let validationError = errors.ValidationError;
 let { UserModel } = mongoose.model("user");
 const User = mongoose.model('user');
 let RoleModel = mongoose.model("role");
-const { getUserById } = require("../mongoDB/subAdmin");
+// const { getUserById } = require("../mongoDB/subAdmin");
 
 const CreateSubAdmin = async (req, res, next) => {
   try {
@@ -21,31 +21,40 @@ const CreateSubAdmin = async (req, res, next) => {
 };
 
 const GetSubAdmins = async (req, res, next) => {
+
+  console.log('get req user', req);
+  console.log("get sub-admin req id", req.request_logs._id);
+  console.log('get req user', req.user);
   try {
+
     if (!req.query.userType) {
       throw new validationError("Enter Valid userType");
     }
 
     if (req.query.userType !== "Bot") {
-      console.log(req.user._id);
+      // console.log("get sub admin req user id", req.user);
       if (!(await IsAdmin(req.user._id))) {
         throw new validationError("Admin can only get sub-admin details");
       }
     } else {
       throw new validationError("Admin can only get sub-admin details");
     }
-    let role = await mongoose
-      .model("role")
-      .findOne({ name: req.query.userType })
-      .exec();
+
+    let role = await mongoose.model("role").findOne({ name: req.query.userType }).exec();
+
     let query = { role: role._id };
-    console.log(req.query.status);
+
+    console.log("get sub admin query", query);
+    console.log("get sub admin req status", req.query.status);
+
     if (req.query.status !== "null") {
       query.status = req.query.status;
     }
-    console.log("query:", query);
+
     res.data = await UserModel.find(query).populate("moduleAccess").exec();
+
     next();
+
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -112,6 +121,7 @@ const Self = async (req, res, next) => {
   console.log(req.body.userId)
   console.log('********************************************')
   let user = await User.findOne({ _id: req.body.userId });
+
   var isAdmin, isUser, isSubAdmin;
   if (IsAdmin(req.body.userId)) {
     console.log("admin:");
@@ -188,6 +198,7 @@ const IsAdmin = async (userId) => {
 };
 
 const IsSubAdmin = async (userId) => {
+  console.log("user", User);
   User.findOne({ _id: userId }).exec(async function (err, user) {
     if (err) {
       return false;

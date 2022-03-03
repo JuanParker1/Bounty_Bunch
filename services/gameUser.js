@@ -14,6 +14,7 @@ const GetUsersById = async (req, res, next) => {
         };
 
         const url = "http://3.20.92.220:3000/api/v1/BBusers/userDetails";
+        
         const responseData = await axios.post(url, body);
 
         console.log(responseData.data.data[0]);

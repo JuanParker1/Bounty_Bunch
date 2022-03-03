@@ -61,6 +61,7 @@ let userGame = mongoose.Schema({
     bliss_bundle_package_end_date: { type: String },
     bliss_bundle_package_info: { type: Object },
     chips: { type: Number }
+    
 });
 
 let userData = mongoose.Schema({
