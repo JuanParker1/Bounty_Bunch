@@ -63,9 +63,9 @@ const GetGames = async (req, res, next) => {
 const GetGamesByGameCategory = async (req, res, next) => {
   try {
     let query = {};
-    if (req.query.gameCategoryId) {
-      query.gameCategoryId = req.query.gameCategoryId;
-    }
+    // if (req.query.gameCategoryId) {
+    //   query.gameCategoryId = req.query.gameCategoryId;
+    // }
     res.data = await getGamesByGameCategory(req.query.gameCategoryId);
     next();
   } catch (ex) {

@@ -20,7 +20,7 @@ const getGamesByGameCategory = async (gameCategoryId) => {
   return Promise.resolve(data);
 };
 
-const getGamesIdName = async () => {
+const getGamesIdName = async (gameName) => {
   const data = await GameModel.find({}).select("_id gameName").lean().exec();
   return Promise.resolve(data);
 };
