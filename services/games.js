@@ -1,4 +1,5 @@
 const {
+  createGame,
   getGames,
   getGamesByGameCategory,
   getGamesIdName,
@@ -19,33 +20,99 @@ var formidable = require("formidable");
 
 const errors = require("./../errors/index");
 
-/* const CreateGame = async (req, res, next) => {
-  try {
-    // if (!await UserModel.isSubAdmin(req.user._id)) {
-    //     throw new validationError("Can be Created By Sub Admin");
-    // }
-    //console.log(req.user._id);
-    var form = await new formidable.IncomingForm();
-    form.parse(req, async (error, fields, files) => {
-      //console.log("files:", files);
-      const gameDetails = JSON.parse(fields.data);
-      console.log(gameDetails);
-      let data = await awsStorageUploadImage(files.file_path2);
-      console.log(data);
-      gameDetails.icon = data;
+// const CreateGame = async (req, res, next) => {
+//   try {
+//     // if (!await UserModel.isSubAdmin(req.user._id)) {
+//     //     throw new validationError("Can be Created By Sub Admin");
+//     // }
+//     //console.log(req.user._id);
+//     var form = await new formidable.IncomingForm();
+//     form.parse(req, async (error, fields, files) => {
+//       //console.log("files:", files);
+//       const gameDetails = JSON.parse(fields.data);
+//       console.log(gameDetails);
+//       let data = await awsStorageUploadImage(files.file_path2);
+//       console.log(data);
+//       gameDetails.icon = data;
 
-      if (files.file_path) {
-        let data2 = await awsStorageUploadApk(files.file_path);
-        console.log(data2);
-        gameDetails.apkUrl = data2;
-      }
-      res.data = await createGame(gameDetails, req.user._id);
+//       if (files.file_path) {
+//         let data2 = await awsStorageUploadApk(files.file_path);
+//         console.log(data2);
+//         gameDetails.apkUrl = data2;
+//       }
+//       res.data = await createGame(gameDetails, req.user._id);
+//     });
+//     next();
+//   } catch (ex) {
+//     errors.handleException(ex, next);
+//   }
+// };
+
+const newGame = async (req, res, next) => {
+  try{
+
+    console.log(req.body);
+
+    const gameCategory = req.body.gameCategory;
+    const gameType = req.body.gameType === "" ? 'SinglePlayer' : req.body.gameType;
+    const gameName = req.body.gameName === "" ? null : req.body.gameName;
+    const gameStatus = req.body.gameStatus;
+    const rule = req.body.rule;
+    const description = req.body.description;
+    const type = req.body.type === "" ? 'Free' : req.body.type;
+    const noOfParticipants = req.body.noOfParticipants;
+    const totalParticipants = req.body.noOfWinners;
+    const icon = req.body.icon;
+    const bundleIdentifier = req.body.bundleIdentifier;
+    const banner = req.body.banner;
+    // const gameResults = req.body.gameResults;
+    const enable = req.body.enable;
+    const apkUrl = req.body.apkUrl;
+    const html5Url = req.body.html5Url;
+    const version = req.body.version;
+    const activityName = req.body.activityName;
+    const packageName = req.body.packageName;
+    const applicationType = req.body.applicationType === "" ? 'Apk' : req.body.applicationType;
+
+    const game = await createGame({
+      gameCategory : gameCategory,
+      gameType : gameType,
+      gameName : gameName,
+      gameStatus : gameStatus,
+      rule : rule,
+      description : description,
+      type : type,
+      noOfParticipants : noOfParticipants,
+      totalParticipants : totalParticipants,
+      icon : icon,
+      bundleIdentifier : bundleIdentifier,
+      banner : banner,
+      // gameResults : gameResults,
+      enable : enable,
+      apkUrl : apkUrl,
+      html5Url : html5Url,
+      version : version,
+      activityName : activityName,
+      packageName : packageName,
+      applicationType : applicationType
     });
-    next();
-  } catch (ex) {
-    errors.handleException(ex, next);
+
+    if(game.error){
+      return res.status(400).json({
+        message: game.error.message
+      });
+    }
+    return res.status(200).json({
+      message: "success",
+      "newGame": game
+    });
+
+    next()
+
+  }catch(error){
+    res.json({ message: error.message });
   }
-}; */
+}
 
 const GetGames = async (req, res, next) => {
   try {
@@ -164,6 +231,7 @@ const EnableDisableGames = async (req, res, next) => {
 };
 
 module.exports = {
+  newGame,
   GetGames,
   GetGamesByGameCategory,
   GetGamesIdName,

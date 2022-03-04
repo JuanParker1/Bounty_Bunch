@@ -18,13 +18,18 @@ module.exports = {
 
 async function createCategory(req, res, next) {
     try {
-        // if (!await UserModel.isAdmin(req.user._id) || !await UserModel.isSubAdmin(req.user._id) ) {
-        //     throw new validationError("can created by subadmin")
-        // }
-        // res.data = CategoryModel.createCategory(req.body, req.user._id);
-        res.data = CategoryModel.createCategory(req.body);
-        console.log(res.body)
-        next();
+        const category = await CategoryModel(req.body);
+        if(category.error){
+            res.status(400).json({
+                message: "something went wrong!",
+                error: category.error.message
+            })
+        }
+        await category.save();
+        return res.status(200).json({
+            message: "game category created successfully",
+            categoryDetail: category
+        });
     } catch (ex) {
         errors.handleException(ex, next);
     }

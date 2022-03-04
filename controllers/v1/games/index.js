@@ -1,4 +1,5 @@
 const {
+  newGame,
   GetGames,
   GetGamesByGameCategory,
   GetGamesIdName,
@@ -12,6 +13,13 @@ const {
 } = require("../../../services/games");
 
 module.exports = [
+
+  {
+    path: "/create-game",
+    method: "post",
+    public: true,
+    controller: newGame,
+  },
   {
     path: "/get-games",
     method: "get",

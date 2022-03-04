@@ -46,9 +46,9 @@ let fields = {
     banner: [{
         type: String
     }],
-    gameResults: {
+    // gameResults: {
 
-    },
+    // },
     enable:{
         type:Boolean,
         default: true

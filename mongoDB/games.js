@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const GameModel = mongoose.model("game");
 
+const createGame = async (gameDetails) => {
+  const game = new GameModel(gameDetails);
+  return Promise.resolve(await game.save());
+};
+
 const getGames = async (query) => {
   const data = await GameModel.find(query)
     .populate("gameCategory")
@@ -87,6 +92,7 @@ const enableDisableGames = async (req) => {
 };
 
 module.exports = {
+  createGame,
   getGames,
   getGamesByGameCategory,
   getGamesIdName,
