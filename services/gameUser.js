@@ -7,7 +7,7 @@ const { getUserById, createUser, updateUser, getallUser } = require("../mongoDB/
 const GetUsersById = async (req, res, next) => {
     try {
         const user = await getUserById(req.params.userId);
-        console.log(user);
+        // console.log(user);
 
         const body = {
             _id: req.params.userId
@@ -17,7 +17,9 @@ const GetUsersById = async (req, res, next) => {
         
         const responseData = await axios.post(url, body);
 
-        console.log(responseData.data.data[0]);
+        // console.log("response-data: ", responseData);
+        // console.log("user: ", user);
+        // console.log("response-data: ", responseData.data.data[0]);
 
         if (user) {
 
@@ -27,6 +29,7 @@ const GetUsersById = async (req, res, next) => {
         }
         else {
             res.data = await createUser(responseData.data.data[0]);
+            // console.log("res-data: ", res.data);
         }
 
         next();

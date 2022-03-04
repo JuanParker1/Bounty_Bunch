@@ -18,12 +18,14 @@ const updateUser = async (id, details) => {
 };
 
 const getUserById = async (id) => {
-    return await userGamee.findOne({ _id: id }).exec();
+    const userById = await userGamee.findOne({ _id: id }).exec();
+    // console.log("get-user-by-id: ", userById);
+    return Promise.resolve(userById);
 };
 
 const getallUser = async (id) => {
-const users = await userGamee.find({ isBot: true });
-  // const users = await userGamee.find({});
+  // const users = await userGamee.find({ isBot: true });
+  const users = await userGamee.find({});
   return Promise.resolve(users);
 };
 
