@@ -43,7 +43,7 @@ const verifyUserToken = async (req, res, next) => {
                 //     })
                 // }
                 else {
-                    console.log("decoded user", decoded);
+                    // console.log("decoded user", decoded);
                     req.user = decoded;
                     next();
                 }

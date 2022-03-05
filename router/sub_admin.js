@@ -93,7 +93,7 @@ router.post('/create', verify.verifyTokenAndSuperAdmin, async (req, res) => {
 router.get('/', verify.verifyTokenAndSuperAdmin, async (req, res) => {
     try{
         const role = 'sub-admin';
-        const subAdmin = await adminAuthModel.find({role: role});
+        const subAdmin = await adminAuthModel.find({role: role},{accessToken:0, password:0});
         // console.log('sub-admin', subAdmin);
         if(subAdmin.error){
             // console.log("error fetching sub admin", subAdmin.error)
@@ -124,7 +124,7 @@ router.get('/get-by-status', verify.verifyTokenAndSuperAdmin, async (req, res) =
         const role = 'sub-admin';
         const query = req.query.status;
         // console.log("query", query);
-        const subAdmin = await adminAuthModel.find({ role: role, status: query });
+        const subAdmin = await adminAuthModel.find({ role: role, status: query }, { accessToken: 0, password:0 });
         // console.log('sub-admin', subAdmin);
         if (subAdmin.error) {
             // console.log("error fetching sub admin", subAdmin.error)
@@ -154,7 +154,7 @@ router.get('/get/:id', verify.verifyTokenAndSuperAdmin, async (req, res) => {
     try {
         const id = req.params.id;
         const role = 'sub-admin'
-        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role });
+        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role }, { accessToken: 0, password:0});
         // console.log('sub-admin', subAdmin);
         if (subAdmin.error) {
             // console.log("error fetching sub admin", subAdmin.error)
@@ -189,7 +189,7 @@ router.patch('/change-status/:id', verify.verifyTokenAndSuperAdmin, async (req, 
         const role = 'sub-admin'
         const {status} = req.body;
 
-        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role });
+        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role }, { accessToken: 0, password:0 });
         if(!subAdmin){
             return res.status(404).json({
                 "error": true,
@@ -231,7 +231,7 @@ router.patch('/edit/:id', verify.verifyTokenAndSuperAdmin, async (req, res) => {
         const role = 'sub-admin'
         const { fullname, username, email, phone } = req.body;
 
-        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role });
+        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role }, { accessToken: 0, password:0 });
         if (!subAdmin) {
             return res.status(404).json({
                 "error": true,
@@ -268,6 +268,50 @@ router.patch('/edit/:id', verify.verifyTokenAndSuperAdmin, async (req, res) => {
     }
 });
 
+// enable disable sub-admin
+router.patch('/enable-disable/:id', verify.verifyTokenAndSuperAdmin, async (req, res) => {
+    try {
+
+        // console.log("body", req.body);
+
+        const id = req.params.id;
+        const role = 'sub-admin'
+        const { enable } = req.body;
+
+        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role }, { accessToken: 0, password:0 });
+        if (!subAdmin) {
+            return res.status(404).json({
+                "error": true,
+                "message": 'Sub Admin Not Found!'
+            })
+        } else if (subAdmin.error) {
+            console.log('change-status error', subAdmin.error);
+            return res.status(400).json({
+                "error": true,
+                "message": subAdmin.error.message
+            })
+        } else {
+
+            subAdmin.enable = enable;
+
+            await subAdmin.save();
+        }
+
+        return res.status(200).json({
+            "message": "sub-admin status updated.",
+            "sub-admin": subAdmin
+        });
+
+    } catch (error) {
+        // console.error("error", error);
+        return res.status(500).json({
+            "error": true,
+            "message": "Something Went Wrong! ",
+            "reason": error.message
+        });
+    }
+});
+
 // update password
 router.patch('/change-password/:id', verify.verifyTokenAndSubAdminOrAdmin, async (req, res) => {
     try{
@@ -277,7 +321,7 @@ router.patch('/change-password/:id', verify.verifyTokenAndSubAdminOrAdmin, async
         const role = 'sub-admin'
         const { password, confirmPassword } = req.body;
 
-        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role });
+        const subAdmin = await adminAuthModel.findOne({ _id: id, role: role }, {accessToken:0});
         if (!subAdmin) {
             return res.status(404).json({
                 "error": true,

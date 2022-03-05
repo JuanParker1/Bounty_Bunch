@@ -121,6 +121,13 @@ router.post ("/login",  async (req, res) => {
             });
         }
 
+        if (!admin.enable) {
+            return res.status(400).json({
+                error: true,
+                message: "Your account is not enabled. You can't access the account. contact support team!",
+            });
+        }
+
         //3. Verify the password is valid
         const isValid = await adminAuthModel.comparePasswords(password, admin.password);
         if (!isValid) {
