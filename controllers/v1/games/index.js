@@ -1,4 +1,5 @@
 const {
+  CreateGame,
   newGame,
   GetGames,
   GetGamesByGameCategory,
@@ -18,7 +19,7 @@ module.exports = [
     path: "/create-game",
     method: "post",
     public: true,
-    controller: newGame,
+    controller: CreateGame,
   },
   {
     path: "/get-games",

@@ -20,33 +20,33 @@ var formidable = require("formidable");
 
 const errors = require("./../errors/index");
 
-// const CreateGame = async (req, res, next) => {
-//   try {
-//     // if (!await UserModel.isSubAdmin(req.user._id)) {
-//     //     throw new validationError("Can be Created By Sub Admin");
-//     // }
-//     //console.log(req.user._id);
-//     var form = await new formidable.IncomingForm();
-//     form.parse(req, async (error, fields, files) => {
-//       //console.log("files:", files);
-//       const gameDetails = JSON.parse(fields.data);
-//       console.log(gameDetails);
-//       let data = await awsStorageUploadImage(files.file_path2);
-//       console.log(data);
-//       gameDetails.icon = data;
+const CreateGame = async (req, res, next) => {
+  try {
+    // if (!await UserModel.isSubAdmin(req.user._id)) {
+    //     throw new validationError("Can be Created By Sub Admin");
+    // }
+    //console.log(req.user._id);
+    var form = await new formidable.IncomingForm();
+    form.parse(req, async (error, fields, files) => {
+      //console.log("files:", files);
+      const gameDetails = JSON.parse(fields.data);
+      console.log(gameDetails);
+      let data = await awsStorageUploadImage(files.file_path2);
+      console.log(data);
+      gameDetails.icon = data;
 
-//       if (files.file_path) {
-//         let data2 = await awsStorageUploadApk(files.file_path);
-//         console.log(data2);
-//         gameDetails.apkUrl = data2;
-//       }
-//       res.data = await createGame(gameDetails, req.user._id);
-//     });
-//     next();
-//   } catch (ex) {
-//     errors.handleException(ex, next);
-//   }
-// };
+      if (files.file_path) {
+        let data2 = await awsStorageUploadApk(files.file_path);
+        console.log(data2);
+        gameDetails.apkUrl = data2;
+      }
+      res.data = await createGame(gameDetails);
+    });
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+};
 
 const newGame = async (req, res, next) => {
   try{
@@ -231,6 +231,7 @@ const EnableDisableGames = async (req, res, next) => {
 };
 
 module.exports = {
+  CreateGame,
   newGame,
   GetGames,
   GetGamesByGameCategory,
