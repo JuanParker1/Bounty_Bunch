@@ -17,7 +17,7 @@ const userSchema = new Schema(
         status: { type: String, enum: ['Inactive', 'Active', 'Locked'], default: 'Active' },
         password: { type: String, required: true },
         accessToken: { type: String, default: null },
-        enable: {type: Boolean, default: true}
+        enable: { type: Boolean, default: true }
         // resetPasswordToken: { type: String, default: null },
         // resetPasswordExpires: { type: Date, default: null },
     }

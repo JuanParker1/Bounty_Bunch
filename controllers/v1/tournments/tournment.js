@@ -44,8 +44,6 @@ async function createTournment(req, res, next) {
         tournment.tournmentSize = req.body.tournmentSize;
         tournment.noOfWinners = req.body.noOfWinners;
         tournment.winners = req.body.winners;
-        tournment.description = req.body.description;
-        tournment.rules = req.body.rules;
         tournment.tourStartDate = req.body.tourStartDate;
         tournment.tourEndTime = req.body.tourEndTime;
         tournment.regStartDate = req.body.regStartDate;
@@ -63,12 +61,11 @@ async function createTournment(req, res, next) {
         tournment.alternateRegendtime = req.body.alternateRegendtime;
         tournment.alternateDate = req.body.alternateDate;
         tournment.alternateTime = req.body.alternateTime;
-        tournment.section = req.body.section;
         tournment.tournmentType = req.body.tournmentType;
         tournment.bots = req.body.bots;
         tournment.bonus = req.body.bonus;
-        tournment.autoCreate = req.body.autoCreate;
-        tournment.enable = req.body.enable;
+        // tournment.autoCreate = req.body.autoCreate;
+        // tournment.enable = req.body.enable;
         tournment.types = req.body.types;
         tournment.status = req.body.status;
         tournment.botsActivation = req.body.botsActivation;
@@ -83,11 +80,11 @@ async function createTournment(req, res, next) {
             tournment.mode = 'Free';
             tournment.tableName = `${req.body.tableName} ${tournment.mode}`
 
-            TournmentModel.createTournment(tournment, req.user._id);
+            TournmentModel.createTournment(tournment);
 
             tournment.mode = 'Paid';
             tournment.tableName = `${req.body.tableName} ${tournment.mode}`
-            res.data = TournmentModel.createTournment(tournment, req.user._id);
+            res.data = TournmentModel.createTournment(tournment);
 
         }
         else if (tournment.mode !== 'Both' && tournment.types === 'Both') {
@@ -95,11 +92,11 @@ async function createTournment(req, res, next) {
             tournment.mode = 'Free';
             tournment.tableName = `${req.body.tableName} ${tournment.mode}`
 
-            TournmentModel.createTournment(tournment, req.user._id);
+            TournmentModel.createTournment(tournment);
 
             tournment.mode = 'Paid';
             tournment.tableName = `${req.body.tableName} ${tournment.mode}`
-            res.data = TournmentModel.createTournment(tournment, req.user._id);
+            res.data = TournmentModel.createTournment(tournment);
 
 
         }
@@ -109,28 +106,28 @@ async function createTournment(req, res, next) {
             tournment.types = 'Public'
             tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
 
-            TournmentModel.createTournment(tournment, req.user._id);
+            TournmentModel.createTournment(tournment);
 
             tournment.mode = 'Free';
             tournment.types = 'Private'
             tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
 
-            TournmentModel.createTournment(tournment, req.user._id);
+            TournmentModel.createTournment(tournment);
 
             tournment.mode = 'Paid';
             tournment.types = 'Public'
             tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
-            res.data = TournmentModel.createTournment(tournment, req.user._id);
+            res.data = TournmentModel.createTournment(tournment);
 
             tournment.mode = 'Paid';
             tournment.types = 'Private'
             tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
-            res.data = TournmentModel.createTournment(tournment, req.user._id);
+            res.data = TournmentModel.createTournment(tournment);
 
 
         }
         else {
-            res.data = TournmentModel.createTournment(tournment, req.user._id);
+            res.data = TournmentModel.createTournment(tournment);
         }
         next();
     } catch (ex) {
@@ -142,7 +139,7 @@ async function createBots(req, res, next) {
     try {
         console.log("bots", req.body)
 
-        res.data = TournmentModel.createBots(req.body, req.user._id);
+        res.data = TournmentModel.createBots(req.body);
         next();
     } catch (err) {
         errors.handleException(err, next);

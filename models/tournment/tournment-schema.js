@@ -111,7 +111,6 @@ let fields = {
         type: String,
         default: new Date().getTime()
     },
-    
     section: {
         type: String,
         enum: 'Tournment|Live|Demo'.split('|'),

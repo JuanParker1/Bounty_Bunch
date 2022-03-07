@@ -16,6 +16,7 @@ module.exports = function (app, config) {
 
     app.use("/api/admin", require('../router/admin_auth'));
     app.use("/api/sub-admin", require('../router/sub_admin'));
+    app.use("/api/tournament-table", require("../router/tournament_table"));
 
     app.set('port', config.port || "4800");
 }
