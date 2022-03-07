@@ -54,7 +54,7 @@ router.post('/create', verify.verifyTokenAndSuperAdmin, async (req, res) => {
         if (phone) {
             return res.status(400).json({
                 "error": true,
-                "message": "Username is already in use",
+                "message": "Phone Number is already in use",
             });
         };
 
