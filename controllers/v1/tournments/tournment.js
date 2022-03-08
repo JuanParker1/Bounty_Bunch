@@ -195,7 +195,7 @@ async function getTournmentsBySection(req, res, next) {
 
 async function getTournmentsByGameId(req, res, next) {
     try {
-        res.data = await (await TournmentModel.find({ gameId: req.params.id })).populate('gameId').exec();
+        res.data = await TournmentModel.find({ gameId: req.params.id }).populate('gameId').exec();
         console.log(res.data)
         next();
     } catch (ex) {
