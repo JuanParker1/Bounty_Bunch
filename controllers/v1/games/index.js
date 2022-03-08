@@ -1,5 +1,6 @@
 const {
   CreateGame,
+  editGame,
   newGame,
   GetGames,
   GetGamesByGameCategory,
@@ -20,6 +21,12 @@ module.exports = [
     method: "post",
     public: true,
     controller: CreateGame,
+  },
+  {
+    path: "/edit-game/:id",
+    method: "post",
+    public: true,
+    controller: editGame,
   },
   {
     path: "/get-games",

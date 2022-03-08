@@ -236,6 +236,7 @@ async function deleteTournment(req, res, next) {
         errors.handleException(ex, next);
     }
 }
+
 async function editTournment(req, res, next) {
 
     console.log(req);

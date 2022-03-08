@@ -230,8 +230,50 @@ const EnableDisableGames = async (req, res, next) => {
   }
 };
 
+async function editGame(req, res, next) {
+  try {
+    if (!req.params.id) {
+      throw new validationError("Send valid Id");
+    }
+    let gameData = await GameModel.findOne({ _id: req.params.id }).exec();
+
+    var form = await new formidable.IncomingForm();
+    form.parse(req, async (error, fields, files) => {
+      //console.log("files:", files);
+      const gameDetails = JSON.parse(fields.data);
+      console.log(gameDetails);
+      if (files.file_path2) {
+        let data = await awsStorageUploadImage(files.file_path2);
+        console.log(data);
+        gameData.icon = data;
+      }
+
+      if (files.file_path) {
+        let data2 = await awsStorageUploadApk(files.file_path);
+        console.log(data2);
+        gameData.apkUrl = data2;
+      }
+      gameData.version = gameDetails.version;
+      gameData.activityName = gameDetails.activityName;
+      gameData.packageName = gameDetails.packageName;
+      gameData.html5Url = gameDetails.html5Url;
+
+      gameData.description = gameDetails.description;
+      gameData.bundleIdentifier = gameDetails.bundleIdentifier;
+      gameData.type = gameDetails.type;
+      gameData.gameType = gameDetails.gameType;
+
+      res.data = await gameData.save();
+    });
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+} 
+
 module.exports = {
   CreateGame,
+  editGame,
   newGame,
   GetGames,
   GetGamesByGameCategory,
