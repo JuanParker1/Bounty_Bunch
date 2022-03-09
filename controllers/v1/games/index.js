@@ -12,6 +12,7 @@ const {
   GameResults,
   DeleteGame,
   GetGamesByCategory,
+  EnableDisableGames
 } = require("../../../services/games");
 
 module.exports = [
@@ -88,5 +89,11 @@ module.exports = [
     method: "delete",
     allUsers: true,
     controller: DeleteGame,
+  },
+  {
+    path: "/:id/enable-disable-game",
+    method: "put",
+    allUsers: true,
+    controller: EnableDisableGames,
   }
 ];
