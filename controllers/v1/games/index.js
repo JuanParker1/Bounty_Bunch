@@ -25,7 +25,7 @@ module.exports = [
   },
   {
     path: "/edit-game/:id",
-    method: "post",
+    method: "put",
     public: true,
     controller: editGame,
   },
