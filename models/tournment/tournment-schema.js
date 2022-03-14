@@ -171,7 +171,39 @@ let fields = {
     },
     prizeData : {
         type: Array
-    }
+    },
+    // ////////////////////////////////////
+    gameName: {
+        type: String,
+        enum: ['Poker', 'Rummy', null],
+        default: null
+    },
+    gameMode: {
+        type: String
+    },
+    gameSpeed: String,
+    tableImage: String,
+    noOfPlayers: String,
+    gameDescription: String,
+    gameRules: String,
+    entryFee: Number,
+    adminStake: Number,
+    bonusesLimit: Number,
+    minEntryFee: String,
+    maxEntryFee: String,
+    minStack: String,
+    maxStack: String,
+
+    ////////////////////////////////////////
+    poolGameType: { type: String, default: null },
+    noOfDeals: { type: String, default: null },
+    gameType: { type: String, default: null },
+    battleDescription: String,
+    battleRules: { type: String, default: null },
+    winningType: { type: String, default: null },
+    entryFee: Number,
+    adminStake: Number,
+    pointValue: Number,
 };
 
 let Schema = require('utils/generate-schema')(fields);
