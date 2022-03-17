@@ -12,107 +12,69 @@ const {
   getGamesByCategory,
   enableDisableGames,
 } = require("../mongoDB/games");
+
 const {
   awsStorageUploadImage,
   awsStorageUploadApk,
+  awsStorageUploadBanner
 } = require("../utils/aws-storage");
-var formidable = require("formidable");
+
+const formidable = require("formidable");
 
 const errors = require("./../errors/index");
 
 const CreateGame = async (req, res, next) => {
   try {
-    // if (!await UserModel.isSubAdmin(req.user._id)) {
-    //     throw new validationError("Can be Created By Sub Admin");
-    // }
-    //console.log(req.user._id);
-    var form = await new formidable.IncomingForm();
+    var form = await new formidable.IncomingForm({ multiples: true });
     form.parse(req, async (error, fields, files) => {
-      //console.log("files:", files);
-      const gameDetails = JSON.parse(fields.data);
-      console.log(gameDetails);
-      let data = await awsStorageUploadImage(files.file_path2);
-      console.log(data);
-      gameDetails.icon = data;
 
-      if (files.file_path) {
-        let data2 = await awsStorageUploadApk(files.file_path);
-        console.log(data2);
-        gameDetails.apkUrl = data2;
+      if (error) {
+        return res.status(400).json({
+          "message": error.message
+        })
       }
-      res.data = await createGame(gameDetails);
+
+      // res.json({ fields, files });
+
+      // console.log("fields:", fields);
+      // console.log("files:", files);
+
+      const gameDetails = (fields);
+      // console.log('gameDetails', gameDetails);
+
+      const icon = await awsStorageUploadImage(files.icon);
+      // console.log("icon: ", icon);
+      gameDetails.icon = icon;
+
+      const banner = await awsStorageUploadBanner(files.banner);
+      // console.log("banner:", banner);
+      gameDetails.banner = banner;
+
+      if (files.apkUrl) {
+        const apkUrl = await awsStorageUploadApk(files.apkUrl);
+        // console.log("apkUrl:", apkUrl);
+        gameDetails.apkUrl = apkUrl;
+      }
+
+      const newGame = await createGame(gameDetails);
+
+      return res.status(200).json(
+        {
+          "message": `new game creatation was successfull`,
+          "new-game": newGame
+        }
+      )
+
     });
-    next();
-  } catch (ex) {
-    errors.handleException(ex, next);
+  } catch (error) {
+    return res.status(500).json(
+      {
+        message: `something went wrong`,
+        error: error.message
+      }
+    )
   }
 };
-
-const newGame = async (req, res, next) => {
-  try{
-
-    console.log(req.body);
-
-    const gameCategory = req.body.gameCategory;
-    const gameType = req.body.gameType === "" ? 'SinglePlayer' : req.body.gameType;
-    const gameName = req.body.gameName === "" ? null : req.body.gameName;
-    const gameStatus = req.body.gameStatus;
-    const rule = req.body.rule;
-    const description = req.body.description;
-    const type = req.body.type === "" ? 'Free' : req.body.type;
-    const noOfParticipants = req.body.noOfParticipants;
-    const totalParticipants = req.body.noOfWinners;
-    const icon = req.body.icon;
-    const bundleIdentifier = req.body.bundleIdentifier;
-    const banner = req.body.banner;
-    // const gameResults = req.body.gameResults;
-    const enable = req.body.enable;
-    const apkUrl = req.body.apkUrl;
-    const html5Url = req.body.html5Url;
-    const version = req.body.version;
-    const activityName = req.body.activityName;
-    const packageName = req.body.packageName;
-    const applicationType = req.body.applicationType === "" ? 'Apk' : req.body.applicationType;
-
-    const game = await createGame({
-      gameCategory : gameCategory,
-      gameType : gameType,
-      gameName : gameName,
-      gameStatus : gameStatus,
-      rule : rule,
-      description : description,
-      type : type,
-      noOfParticipants : noOfParticipants,
-      totalParticipants : totalParticipants,
-      icon : icon,
-      bundleIdentifier : bundleIdentifier,
-      banner : banner,
-      // gameResults : gameResults,
-      enable : enable,
-      apkUrl : apkUrl,
-      html5Url : html5Url,
-      version : version,
-      activityName : activityName,
-      packageName : packageName,
-      applicationType : applicationType
-    });
-
-    if(game.error){
-      return res.status(400).json({
-        message: game.error.message
-      });
-    }
-    return res.status(200).json({
-      message: "success",
-      "newGame": game
-    });
-
-    next()
-
-  }catch(error){
-    res.json({ message: error.message });
-  }
-}
 
 const GetGames = async (req, res, next) => {
   try {
@@ -237,22 +199,27 @@ async function editGame(req, res, next) {
     }
     let gameData = await GameModel.findOne({ _id: req.params.id }).exec();
 
-    var form = await new formidable.IncomingForm();
+    var form = await new formidable.IncomingForm({ multiples: true });
+
     form.parse(req, async (error, fields, files) => {
       //console.log("files:", files);
       const gameDetails = JSON.parse(fields.data);
-      console.log(gameDetails);
-      if (files.file_path2) {
-        let data = await awsStorageUploadImage(files.file_path2);
-        console.log(data);
-        gameData.icon = data;
+      // console.log(gameDetails);
+
+      const icon = await awsStorageUploadImage(files.icon);
+      // console.log("icon: ", icon);
+      gameData.icon = icon;
+
+      const banner = await awsStorageUploadBanner(files.banner);
+      // console.log("banner:", banner);
+      gameData.banner = banner;
+
+      if (files.apkUrl) {
+        const apkUrl = await awsStorageUploadApk(files.apkUrl);
+        // console.log("apkUrl:", apkUrl);
+        gameData.apkUrl = apkUrl;
       }
 
-      if (files.file_path) {
-        let data2 = await awsStorageUploadApk(files.file_path);
-        console.log(data2);
-        gameData.apkUrl = data2;
-      }
       gameData.version = gameDetails.version;
       gameData.activityName = gameDetails.activityName;
       gameData.packageName = gameDetails.packageName;
@@ -263,18 +230,28 @@ async function editGame(req, res, next) {
       gameData.type = gameDetails.type;
       gameData.gameType = gameDetails.gameType;
 
-      res.data = await gameData.save();
+      const updateGameData = await gameData.save();
+
+      return res.status(200).json({
+        message: "game updated successfully",
+        game: updateGameData
+      })
+
     });
-    next();
-  } catch (ex) {
-    errors.handleException(ex, next);
+  } catch (error) {
+    return res.status(500).json(
+      {
+        message: `something went wrong`,
+        error: error.message
+      }
+    )
   }
-} 
+}
 
 module.exports = {
   CreateGame,
   editGame,
-  newGame,
+  // newGame,
   GetGames,
   GetGamesByGameCategory,
   GetGamesIdName,

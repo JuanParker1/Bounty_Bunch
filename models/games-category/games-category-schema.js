@@ -12,9 +12,9 @@ let fields = {
         type:String,
         required:false
     },
-    banner:[{
+    banner:{
         type:String
-    }],
+    },
     // type:{
     //     type: String,
     //     enum: 'SinglePlayer|MultiPlayer'.split('|'),

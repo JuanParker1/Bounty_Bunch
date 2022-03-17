@@ -5,27 +5,49 @@ const {
   enableDisableBanners,
 } = require("../mongoDB/banner");
 
+const { awsStorageUploadBanner } = require("../utils/aws-storage");
+
 const errors = require("errors/index");
 
-const CreateBanners = async (req, res, next) => {
-  try {
-    const gameCategory =
-      req.body.gameCategory === "" ? null : req.body.gameCategory;
-    const gameName = req.body.gameName === "" ? null : req.body.gameName;
+var formidable = require("formidable");
 
-    res.data = await addNewBanner({
-      bannerType: req.body.bannerType,
-      status: "Active",
-      enable: true,
-      banners: req.body.banners,
-      gameCategory: gameCategory,
-      gameName: gameName,
+const CreateBanners = async (req, res) => {
+  try {
+
+    var form = await new formidable.IncomingForm({ multiples: true });
+    form.parse(req, async (error, fields, files) => {
+
+      if (error) {
+        return res.json({
+          error: error.message
+        });
+      }
+
+      const bannerDetails = (fields);
+      console.log('bannerDetailes:', bannerDetails);
+
+      var filedata = await awsStorageUploadBanner(files.banners);
+      console.log("filename:", filedata);
+      bannerDetails.banners = filedata;
+
+      const newBanner = await addNewBanner(bannerDetails);
+
+      return res.status(200).json({
+        "message": `banner added to database successfully`,
+        "New-Banner": newBanner
+      });
+
     });
-    next();
-  } catch (err) {
-    res.json({ message: err });
+  } catch (error) {
+    return res.status(500).json(
+      {
+        message: `something went wrong`,
+        error: error.message
+      }
+    )
   }
 };
+
 
 const GetBanners = async (req, res, next) => {
   try {
@@ -63,6 +85,7 @@ const EnableDisableBanners = async (req, res, next) => {
 };
 
 module.exports = {
+  // createBanners,
   CreateBanners,
   GetBanners,
   DeleteBanner,

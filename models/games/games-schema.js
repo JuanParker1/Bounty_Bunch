@@ -43,9 +43,9 @@ let fields = {
     bundleIdentifier:{
         type: String
     },
-    banner: [{
+    banner: {
         type: String
-    }],
+    },
     // gameResults: {
 
     // },
@@ -73,7 +73,7 @@ let fields = {
     },
     applicationType: {
         type: String,
-        enum: 'Apk'.split('|'),
+        enum: 'Apk|Html5'.split('|'),
         default: 'Apk'
     }
 };

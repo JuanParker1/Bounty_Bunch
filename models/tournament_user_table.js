@@ -5,16 +5,12 @@ const tournamentTableSchema = new Schema(
     {
         tournamentId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'tournment'
+            ref: 'tournment',
         },
-        userId: {
+        users: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
-        }
-        // tournamentTable: {
-        //     type: Array,
-        //     default: []
-        // }
+        }]
     }
 );
 

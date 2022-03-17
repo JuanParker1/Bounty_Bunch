@@ -83,6 +83,48 @@ const awsStorageUploadImage = async (file) => {
   return urlLink.Location;
 }
 
+const awsStorageUploadBanner = async (file) => {
+  var urlLink = '';
+
+  var uploadParams = { Bucket: 'bounty-bunch-banners', Key: '', Body: '' };
+
+  var fileStream = fs.createReadStream(file.path);
+  fileStream.on('error', function (err) {
+    console.log('File Error', err);
+  });
+
+  uploadParams.Body = fileStream;
+  uploadParams.Key = path.basename(`${file.path}_${file.name}`);
+
+  // call S3 to retrieve upload file to specified bucket
+  urlLink = await s3.upload(uploadParams).promise();
+
+  console.log(urlLink)
+
+  return urlLink.Location;
+}
+
+const awsStorageUploadGameCategory = async (file) => {
+  var urlLink = '';
+
+  var uploadParams = { Bucket: 'bounty-bunch-game-category', Key: '', Body: '' };
+
+  var fileStream = fs.createReadStream(file.path);
+  fileStream.on('error', function (err) {
+    console.log('File Error', err);
+  });
+
+  uploadParams.Body = fileStream;
+  uploadParams.Key = path.basename(`${file.path}_${file.name}`);
+
+  // call S3 to retrieve upload file to specified bucket
+  urlLink = await s3.upload(uploadParams).promise();
+
+  console.log(urlLink)
+
+  return urlLink.Location;
+}
+
 const awsStorageUploadApk = async (file) => {
   var urlLink = '';
 
@@ -147,6 +189,8 @@ const listBuckets = async () => {
 
 module.exports = {
   awsStorageUploadImage,
+  awsStorageUploadBanner,
+  awsStorageUploadGameCategory,
   awsStorageUploadApk,
   listBuckets,
   createS3Bucket

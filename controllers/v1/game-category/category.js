@@ -5,35 +5,53 @@ const { CostExplorer } = require('aws-sdk');
 const validationError = errors.ValidationError;
 const UserModel = mongoose.model('user');
 
-module.exports = {
-    createCategory,
-    getCategories,
-    deleteCategories,
-    enableDisableCategories,
-    editGameCategory,
-    getCategoriesById,
-    getCategoriesByName
+const { awsStorageUploadGameCategory, awsStorageUploadBanner } = require("../../../utils/aws-storage");
+const formidable = require("formidable");
 
-};
+const createCategory = async (req, res) => {
+    try{
+        let form = await new formidable.IncomingForm({multiples: true});
+        form.parse(
+            req, async (error, fields, files) =>{
 
-async function createCategory(req, res, next) {
-    try {
-        const category = await CategoryModel(req.body);
-        if(category.error){
-            res.status(400).json({
-                message: "something went wrong!",
-                error: category.error.message
-            })
-        }
-        await category.save();
-        return res.status(200).json({
-            message: "game category created successfully",
-            categoryDetail: category
-        });
-    } catch (ex) {
-        errors.handleException(ex, next);
+                if (error) {
+                    return res.json({
+                        error: error.message
+                    });
+                }
+
+                const categoryDetails = (fields);
+                console.log("fileds:", categoryDetails);
+
+                const icon = await awsStorageUploadGameCategory(files.icon);
+                console.log("icon:", icon);
+
+                const banner = await awsStorageUploadBanner(files.banner);
+                console.log("banner:", banner);
+
+                categoryDetails.icon = icon;
+                categoryDetails.banner = banner
+
+                const newGameCategory = await CategoryModel(categoryDetails);
+                await newGameCategory.save();
+
+                return res.status(200).json({
+                    "message": `game category created succefully`,
+                    "New-Banner": newGameCategory
+                });
+            } 
+        );
+    }
+    catch(error){
+        return res.status(500).json(
+            {
+                "message": "somethin went wrong!",
+                "error": error.message
+            }
+        )
     }
 }
+
 
 async function getCategories(req, res, next) {
     try {
@@ -80,20 +98,56 @@ async function enableDisableCategories(req, res, next) {
     }
 }
 
-async function editGameCategory(req, res, next) {
-    try {
-        if (!req.params.id) {
-            throw new validationError("Send valid Id");
-        }
-        let gameCategoryData = await CategoryModel.findOne({ _id: req.params.id }).exec();
-        gameCategoryData.description = req.body.description;
-        if (req.body.icon) {
-            gameCategoryData.icon = req.body.icon;
-        }
-        res.data = await gameCategoryData.save();
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
+const editGameCategory = async (req, res) => {
+    try{
+
+        const id = req.params.id;
+        
+        const gameCategoryData = await CategoryModel.findByIdAndUpdate(id).exec();
+        
+        let form = await new formidable.IncomingForm({ multiples: true });
+
+        form.parse(
+            req, async (error, fields, files) => {
+
+                if (error) {
+                    return res.json({
+                        error: error.message
+                    });
+                }
+
+                const categoryDetails = (fields);
+                console.log("fileds:", categoryDetails);
+
+                const icon = await awsStorageUploadGameCategory(files.icon);
+                console.log("icon:", icon);
+
+                const banner = await awsStorageUploadBanner(files.banner);
+                console.log("banner: ", banner);
+
+                gameCategoryData.description = categoryDetails.description;
+                gameCategoryData.icon = icon;
+                gameCategoryData.banner = banner
+
+                console.log("desc: ", categoryDetails.description);
+
+                // const updatedGameCategory = await gameCategoryData(categoryDetails);
+                await gameCategoryData.save();
+
+                return res.status(200).json({
+                    "message": `game category created succefully`,
+                    "New-Banner": gameCategoryData
+                });
+            }
+        );
+
+    }catch(error){
+        return res.status(500).json(
+            {
+                "message": "somethin went wrong!",
+                "error": error.message
+            }
+        )
     }
 }
 
@@ -120,3 +174,13 @@ async function getCategoriesByName(req, res, next) {
         errors.handleException(ex, next);
     }
 }
+
+module.exports = {
+    createCategory,
+    getCategories,
+    deleteCategories,
+    enableDisableCategories,
+    editGameCategory,
+    getCategoriesById,
+    getCategoriesByName
+};

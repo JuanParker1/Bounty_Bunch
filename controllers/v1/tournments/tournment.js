@@ -4,134 +4,44 @@ const errors = require('errors/index');
 const validationError = errors.ValidationError;
 const UserModel = mongoose.model('user');
 
-module.exports = {
-    createTournment,
-    getTournments,
-    getTournmentByTableName,
-    getTournmentById,
-    getTournmentByTournamentId,
-    getTournmentsBySection,
-    getTournmentsByGameId,
-    deleteTournment,
-    editTournment,
-    enableDisableTournment,
-    createBots
-};
+const { awsStorageUploadImage } = require("../../../utils/aws-storage");
 
-async function createTournment(req, res, next) {
+const formidable = require("formidable");
+
+const createTournment = async (req, res) => {
     try {
-        // if (!await UserModel.isSubAdmin(req.user._id)) {
-        //     throw validationError("can created by subadmin")
-        // }
-        //res.data = TournmentModel.createTournment(req.body);
-        // console.log('User Id', req.user)
-        let tournment = {};
-        tournment.attempts = req.body.attempts;
-        tournment.tableImage = req.body.tableImage;
-        tournment.noOfAttempts = req.body.noOfAttempts;
-        tournment.description = req.body.description;
-        tournment.rules = req.body.rules;
-        tournment.autoCreate = req.body.autoCreate;
-        tournment.enable = req.body.enable;
-        tournment.botsActivation = req.body.botsActivation;
-        tournment.minPlayer = req.body.minPlayer;
-        tournment.gameId = req.body.gameId;
-        tournment.section = req.body.section;
-        tournment.tableName = req.body.tableName;
-        tournment.entryFee = req.body.entryFee;
-        tournment.winningAmount = req.body.winningAmount;
-        tournment.adminStake = req.body.adminStake;
-        tournment.tournmentSize = req.body.tournmentSize;
-        tournment.noOfWinners = req.body.noOfWinners;
-        tournment.winners = req.body.winners;
-        tournment.tourStartDate = req.body.tourStartDate;
-        tournment.tourEndTime = req.body.tourEndTime;
-        tournment.regStartDate = req.body.regStartDate;
-        tournment.regStartTime = req.body.regStartTime;
-        tournment.startDate = req.body.startDate;
-        tournment.startTime = req.body.startTime;
-        tournment.endDate = req.body.endDate;
-        tournment.endTime = req.body.endTime;
-        tournment.mode = req.body.mode;
-        tournment.alternateTourStartDate = req.body.alternateTourStartDate;
-        tournment.alternateTourStartTime = req.body.alternateTourStartTime;
-        tournment.alternateRegStartDate = req.body.alternateRegStartDate;
-        tournment.alternateRegStartTime = req.body.alternateRegStartTime;
-        tournment.alternateRegenddate = req.body.alternateRegenddate;
-        tournment.alternateRegendtime = req.body.alternateRegendtime;
-        tournment.alternateDate = req.body.alternateDate;
-        tournment.alternateTime = req.body.alternateTime;
-        tournment.tournmentType = req.body.tournmentType;
-        tournment.bots = req.body.bots;
-        tournment.bonus = req.body.bonus;
-        // tournment.autoCreate = req.body.autoCreate;
-        // tournment.enable = req.body.enable;
-        tournment.types = req.body.types;
-        tournment.status = req.body.status;
-        tournment.botsActivation = req.body.botsActivation;
-        tournment.totalBots = req.body.totalBots;
-        tournment.fairPlayBots = req.body.fairPlayBots;
-        tournment.mustWinBots = req.body.mustWinBots;
-        tournment.minPlayer = req.body.minPlayer;
-        tournment.prizeData = req.body.prizeData;
 
-        if (tournment.mode === 'Both' && tournment.types !== 'Both') {
+        const form = await new formidable.IncomingForm({ multiples: true });
+        form.parse(req, async (error, fields, files) => {
 
-            tournment.mode = 'Free';
-            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
+            if (error) {
+                return res.json({
+                    error: error.message
+                });
+            }
 
-            TournmentModel.createTournment(tournment);
+            const tournamentDetails = (fields);
+            // console.log('tournamentDetailes:', tournamentDetails);
 
-            tournment.mode = 'Paid';
-            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
-            res.data = TournmentModel.createTournment(tournment);
+            const image = await awsStorageUploadImage(files.tableImage);
+            // console.log("tableImage:", image);
+            tournamentDetails.banners = image;
 
-        }
-        else if (tournment.mode !== 'Both' && tournment.types === 'Both') {
+            const newTournament = await TournmentModel(tournamentDetails);
 
-            tournment.mode = 'Free';
-            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
+            return res.status(200).json({
+                "message": `Tournament added to database successfully`,
+                "New-Tournament": newTournament
+            });
 
-            TournmentModel.createTournment(tournment);
-
-            tournment.mode = 'Paid';
-            tournment.tableName = `${req.body.tableName} ${tournment.mode}`
-            res.data = TournmentModel.createTournment(tournment);
-
-
-        }
-        else if (tournment.mode === 'Both' && tournment.types === 'Both') {
-
-            tournment.mode = 'Free';
-            tournment.types = 'Public'
-            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
-
-            TournmentModel.createTournment(tournment);
-
-            tournment.mode = 'Free';
-            tournment.types = 'Private'
-            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
-
-            TournmentModel.createTournment(tournment);
-
-            tournment.mode = 'Paid';
-            tournment.types = 'Public'
-            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
-            res.data = TournmentModel.createTournment(tournment);
-
-            tournment.mode = 'Paid';
-            tournment.types = 'Private'
-            tournment.tableName = `${req.body.tableName} ${tournment.mode} ${tournment.types}`
-            res.data = TournmentModel.createTournment(tournment);
-
-
-        }
-        else {
-            res.data = TournmentModel.createTournment(tournment);
-        }
-        next();
-    } catch (ex) {
-        errors.handleException(ex, next);
+        });
+    } catch (error) {
+        return res.status(500).json(
+            {
+                message: `something went wrong`,
+                error: error.message
+            }
+        )
     }
 }
 
@@ -236,34 +146,47 @@ async function deleteTournment(req, res, next) {
         errors.handleException(ex, next);
     }
 }
-async function editTournment(req, res, next) {
 
-    console.log(req);
-    let tournment = await TournmentModel.findOne({ _id: req.params.id }).exec();
-    if (tournment)
-        try {
-            if (!tournment.id) {
-                throw new ValidationError("enter valid tournment id");
+const editTournment = async (req, res) => {
+    try {
+        const tournment = await TournmentModel.findByIdAndUpdate(req.params.id).exec();
+
+        const form = await new formidable.IncomingForm({ multiples: true });
+        form.parse(req, async (error, fields, files) => {
+
+            if (error) {
+                return res.json({
+                    error: error.message
+                });
             }
-            res.data = await TournmentModel.updateOne(
-                { "_id": req.params.id }, // Filter
-                {
-                    $set: {
-                        "description": req.body.description,
-                        "rules": req.body.rules
-                    }
-                }, // Update
-                { upsert: true } // add document with req.body._id if not exists 
-            ).then((result) => {
-                console.log(result.body)
-            }).catch((error) => {
-                console.log(error)
+
+            const tournamentDetails = (fields);
+            // console.log('tournamentDetailes:', tournamentDetails);
+
+            const image = await awsStorageUploadImage(files.tableImage);
+            // console.log("tableImage:", image);
+            tournment.banners = image;
+
+            const updatedTournament = await tournment(tournamentDetails);
+
+            await updatedTournament.save();
+
+            return res.status(200).json({
+                "message": `tournament updated successfully`,
+                "Updated-Tournament": updatedTournament
             });
-            next();
-        } catch (ex) {
-            errors.handleException(ex, next);
-        }
-}
+
+        });
+    } catch (error) {
+        return res.status(500).json(
+            {
+                message: `something went wrong`,
+                error: error.message
+            }
+        )
+    }
+
+};
 
 async function enableDisableTournment(req, res, next) {
     try {
@@ -279,3 +202,17 @@ async function enableDisableTournment(req, res, next) {
         errors.handleException(ex, next);
     }
 }
+
+module.exports = {
+    createTournment,
+    getTournments,
+    getTournmentByTableName,
+    getTournmentById,
+    getTournmentByTournamentId,
+    getTournmentsBySection,
+    getTournmentsByGameId,
+    deleteTournment,
+    editTournment,
+    enableDisableTournment,
+    createBots
+};
