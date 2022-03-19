@@ -20,17 +20,19 @@ const createCategory = async (req, res) => {
                     });
                 }
 
+                // console.log("files", files);
+
                 const categoryDetails = (fields);
                 console.log("fileds:", categoryDetails);
 
                 const icon = await awsStorageUploadGameCategory(files.icon);
                 console.log("icon:", icon);
 
-                const banner = await awsStorageUploadBanner(files.banner);
-                console.log("banner:", banner);
+                // const banner = await awsStorageUploadBanner(files.banner);
+                // console.log("banner:", banner);
 
                 categoryDetails.icon = icon;
-                categoryDetails.banner = banner
+                // categoryDetails.banner = banner
 
                 const newGameCategory = await CategoryModel(categoryDetails);
                 await newGameCategory.save();
