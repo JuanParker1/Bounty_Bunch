@@ -19,6 +19,8 @@ const createTournment = async (req, res) => {
                     error: error.message
                 });
             }
+            console.log("fields:", fields);
+            console.log("files:", files);
 
             const tournamentDetails = (fields);
             // console.log('tournamentDetailes:', tournamentDetails);
@@ -159,6 +161,9 @@ const editTournment = async (req, res) => {
                     error: error.message
                 });
             }
+
+            console.log("fields:", fields);
+            console.log("files:", files);
 
             const tournamentDetails = (fields);
             // console.log('tournamentDetailes:', tournamentDetails);

@@ -36,8 +36,8 @@ const CreateGame = async (req, res, next) => {
 
       // res.json({ fields, files });
 
-      // console.log("fields:", fields);
-      // console.log("files:", files);
+      console.log("fields:", fields);
+      console.log("files:", files);
 
       const gameDetails = (fields);
       // console.log('gameDetails', gameDetails);
@@ -202,6 +202,10 @@ async function editGame(req, res, next) {
     var form = await new formidable.IncomingForm({ multiples: true });
 
     form.parse(req, async (error, fields, files) => {
+
+      console.log("fields:", fields);
+      console.log("files:", files);
+
       //console.log("files:", files);
       const gameDetails = JSON.parse(fields.data);
       // console.log(gameDetails);

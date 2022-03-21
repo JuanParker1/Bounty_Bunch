@@ -20,7 +20,7 @@ const createCategory = async (req, res) => {
                     });
                 }
 
-                // console.log("files", files);
+                console.log("files", files);
 
                 const categoryDetails = (fields);
                 console.log("fileds:", categoryDetails);
@@ -117,6 +117,9 @@ const editGameCategory = async (req, res) => {
                         error: error.message
                     });
                 }
+
+                console.log("fields:", fields);
+                console.log("files:", files);
 
                 const categoryDetails = (fields);
                 console.log("fileds:", categoryDetails);
