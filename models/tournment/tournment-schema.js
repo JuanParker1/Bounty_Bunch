@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Schema.ObjectId;
 let fields = {
     gameId: {
-        type: ObjectId, 
+        type: ObjectId,
         ref: 'game'
     },
     tableName: {
@@ -192,17 +192,25 @@ let fields = {
     maxEntryFee: String,
     minStack: String,
     maxStack: String,
-
     ////////////////////////////////////////
-    poolGameType: {type: String, default: null},
-    noOfDeals: {type: String, default: null},
-    gameType: {type: String, default: null},
+    poolGameType: { type: String, default: null },
+    noOfDeals: { type: String, default: null },
+    gameType: { type: String, default: null },
     battleDescription: String,
-    battleRules: {type: String, default: null},
-    winningType: {type: String, default: null},
+    battleRules: { type: String, default: null },
+    winningType: { type: String, default: null },
     entryFee: Number,
     adminStake: Number,
     pointValue: Number,
+    ////////////////////////////////////////////////u
+    users: [
+        {
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'userGame'
+            }
+        }
+    ]
 };
 
 let Schema = require('utils/generate-schema')(fields);

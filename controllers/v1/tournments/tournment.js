@@ -62,7 +62,7 @@ async function getTournments(req, res, next) {
         if (req.query.status !== 'null') {
             query.Status = req.query.status;
         }
-        res.data = await TournmentModel.find(query).exec();
+        res.data = await TournmentModel.find(query).populate('users.userId').exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -188,6 +188,51 @@ const editTournment = async (req, res) => {
 
 };
 
+// update tournament user list
+const tournamentUserUpdate = async (req, res) => {
+    try { 
+        const id = req.params.id;
+        const { users } = req.body;
+        console.log(
+            {
+                param: id,
+                params: req.params.id,
+                body: req.body
+            }
+        )
+        const tournament = await TournmentModel.findByIdAndUpdate({_id: id }, { $addToSet: { users: users }}, { new: true } );
+        
+        if(!tournament){
+            return res.status(500).json(
+                {
+                    message: `Tournament id: ${id} is not available in the database.`
+                }
+            )
+        }else if(tournament.error){
+            return res.status(400).json(
+                {
+                    message: tournament.error.message
+                }
+            )
+        }else{
+            return res.status(200).json(
+                {
+                    message: `user linked to the tournament successfully`,
+                    response: tournament
+                }
+            )
+        }
+
+    } catch (error) {
+        return res.status(500).json(
+            {
+                message: `something went wrong`,
+                error: error.message
+            }
+        )
+    }
+};
+
 async function enableDisableTournment(req, res, next) {
     try {
         if (!req.params.id) {
@@ -204,6 +249,7 @@ async function enableDisableTournment(req, res, next) {
 }
 
 module.exports = {
+    tournamentUserUpdate,
     createTournment,
     getTournments,
     getTournmentByTableName,

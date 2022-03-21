@@ -43,9 +43,9 @@ let fields = {
     bundleIdentifier:{
         type: String
     },
-    banner: {
-        type: String
-    },
+    // banner: {
+    //     type: String
+    // },
     // gameResults: {
 
     // },

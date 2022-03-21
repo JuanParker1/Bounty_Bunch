@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const fs = require('fs');
-var path = require('path');
+const path = require('path');
 
 const s3 = new AWS.S3({
   region: 'ap-south-1',
@@ -63,11 +63,11 @@ const s3 = new AWS.S3({
 // }
 
 const awsStorageUploadImage = async (file) => {
-  var urlLink = '';
+  let urlLink = '';
 
-  var uploadParams = { Bucket: 'gameadminimages', Key: '', Body: '' };
+  let uploadParams = { Bucket: 'gameadminimages', Key: '', Body: '' };
 
-  var fileStream = fs.createReadStream(file.path);
+  let fileStream = fs.createReadStream(file.path);
   fileStream.on('error', function (err) {
     console.log('File Error', err);
   });
@@ -84,11 +84,11 @@ const awsStorageUploadImage = async (file) => {
 }
 
 const awsStorageUploadBanner = async (file) => {
-  var urlLink = '';
+  let urlLink = '';
 
-  var uploadParams = { Bucket: 'bounty-bunch-banners', Key: '', Body: '' };
+  let uploadParams = { Bucket: 'bounty-bunch-banners', Key: '', Body: '' };
 
-  var fileStream = fs.createReadStream(file.path);
+  let fileStream = fs.createReadStream(file.path);
   fileStream.on('error', function (err) {
     console.log('File Error', err);
   });
@@ -105,11 +105,11 @@ const awsStorageUploadBanner = async (file) => {
 }
 
 const awsStorageUploadGameCategory = async (file) => {
-  var urlLink = '';
+  let urlLink = '';
 
-  var uploadParams = { Bucket: 'bounty-bunch-game-category', Key: '', Body: '' };
+  let uploadParams = { Bucket: 'bounty-bunch-game-category', Key: '', Body: '' };
 
-  var fileStream = fs.createReadStream(file.path);
+  let fileStream = fs.createReadStream(file.path);
   fileStream.on('error', function (err) {
     console.log('File Error', err);
   });
@@ -126,11 +126,11 @@ const awsStorageUploadGameCategory = async (file) => {
 }
 
 const awsStorageUploadApk = async (file) => {
-  var urlLink = '';
+  let urlLink = '';
 
-  var uploadParams = { Bucket: 'bountybunch-apk-bucket', Key: '', Body: '' };
+  let uploadParams = { Bucket: 'bountybunch-apk-bucket', Key: '', Body: '' };
 
-  var fileStream = fs.createReadStream(file.path);
+  let fileStream = fs.createReadStream(file.path);
   fileStream.on('error', function (err) {
     console.log('File Error', err);
   });
@@ -151,7 +151,7 @@ const createS3Bucket = async () => {
   
   try {
       // Create the parameters for calling createBucket
-      var bucketParams = {
+      let bucketParams = {
           Bucket: 'bountybunch-apk-bucket'
       };
 
@@ -169,7 +169,7 @@ const createS3Bucket = async () => {
 };
 
 const listBuckets = async () => {
-  var datas = [];
+  let datas = [];
   try {
       // Call S3 to list the buckets
       s3.listBuckets(function (err, data) {

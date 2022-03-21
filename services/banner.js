@@ -23,6 +23,9 @@ const CreateBanners = async (req, res) => {
         });
       }
 
+      // console.log("fileds", fields);
+      // console.log('files:', files);
+
       const bannerDetails = (fields);
       console.log('bannerDetailes:', bannerDetails);
 
