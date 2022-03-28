@@ -8,6 +8,7 @@ const { awsStorageUploadImage } = require("../../../utils/aws-storage");
 
 const formidable = require("formidable");
 
+// create tournament function using formidable
 const createTournment = async (req, res) => {
     try {
 
@@ -27,9 +28,19 @@ const createTournment = async (req, res) => {
 
             const image = await awsStorageUploadImage(files.tableImage);
             // console.log("tableImage:", image);
-            tournamentDetails.banners = image;
+            tournamentDetails.tableImage = image;
 
             const newTournament = await TournmentModel(tournamentDetails);
+
+            if(newTournament.error){
+                return res.status(400).json(
+                    {
+                        message: newTournament.error.message
+                    }
+                )
+            }
+
+            await newTournament.save();
 
             return res.status(200).json({
                 "message": `Tournament added to database successfully`,
@@ -64,7 +75,7 @@ async function getTournments(req, res, next) {
         if (req.query.status !== 'null') {
             query.Status = req.query.status;
         }
-        res.data = await TournmentModel.find(query).populate('users.userId').exec();
+        res.data = await TournmentModel.find(query).populate('users').exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -121,7 +132,7 @@ async function getTournmentById(req, res, next) {
         // if (req.query.status !== 'null') {
         //     query.status = req.query.status;
         // }
-        res.data = await TournmentModel.find(query).exec();
+        res.data = await TournmentModel.find(query).populate(UserModel).exec();
         next();
     } catch (ex) {
         errors.handleException(ex, next);
@@ -198,13 +209,13 @@ const tournamentUserUpdate = async (req, res) => {
     try { 
         const id = req.params.id;
         const { users } = req.body;
-        console.log(
-            {
-                param: id,
-                params: req.params.id,
-                body: req.body
-            }
-        )
+        // console.log(
+        //     {
+        //         param: id,
+        //         params: req.params.id,
+        //         body: req.body
+        //     }
+        // )
         const tournament = await TournmentModel.findByIdAndUpdate({_id: id }, { $addToSet: { users: users }}, { new: true } );
         
         if(!tournament){

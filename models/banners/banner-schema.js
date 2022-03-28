@@ -26,7 +26,7 @@ let fields = mongoose.Schema({
         required:false
     },
     banners: {
-        type: String
+        type: Array
     }
 });
 

@@ -202,7 +202,7 @@ let fields = {
     entryFee: Number,
     adminStake: Number,
     pointValue: Number,
-    ////////////////////////////////////////////////u
+    ////////////////////////////////////////////////
     users: [
         {
             userId: {
