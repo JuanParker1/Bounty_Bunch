@@ -56,10 +56,10 @@ module.exports = [
         controller: tournmentController.deleteTournment
     },
     {
-        path: '/:id/register-user',
+        path: '/:tournamentId/:userId/register-user',
         method: 'put',
         allUsers: true,
-        controller: tournmentController.tournamentUserUpdate,
+        controller: tournmentController.tournamentUserRegister,
     },
     {
         path: '/:id/enable-disable-tournment',

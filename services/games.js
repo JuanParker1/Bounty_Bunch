@@ -23,6 +23,8 @@ const formidable = require("formidable");
 
 const errors = require("./../errors/index");
 
+// const multer = require("../utils/multer");
+
 const CreateGame = async (req, res, next) => {
   try {
     var form = await new formidable.IncomingForm({ multiples: true });
@@ -46,9 +48,9 @@ const CreateGame = async (req, res, next) => {
       // console.log("icon: ", icon);
       gameDetails.icon = icon;
 
-      const banner = await awsStorageUploadBanner(files.banner);
-      // console.log("banner:", banner);
-      gameDetails.banner = banner;
+      // const banner = await awsStorageUploadBanner(files.banner);
+      // // console.log("banner:", banner);
+      // gameDetails.banner = banner;
 
       if (files.apkUrl) {
         const apkUrl = await awsStorageUploadApk(files.apkUrl);
@@ -75,6 +77,24 @@ const CreateGame = async (req, res, next) => {
     )
   }
 };
+
+// // create game using multer
+// const CreateGame = async (req, res) => {
+//   console.log("before-files:", req.files);
+//   console.log("before-fields:", req.body);
+//   multer.uploadGameImage(req, res, async (error) => {
+//     console.log("a/i-files:", req.file);
+//     console.log("a/i-fields:", req.body);
+//   });
+//   // multer.uploadBanners(req, res, async (error) => {
+//   //   console.log("a/b-files:", req.file);
+//   //   console.log("a/b-fields:", req.body);
+//   // });
+//   // multer.uploadApk(req, res, async (error) => {
+//   //   console.log("a/a-files:", req.file);
+//   //   console.log("a/a-fields:", req.body);
+//   // });
+// }
 
 const GetGames = async (req, res, next) => {
   try {

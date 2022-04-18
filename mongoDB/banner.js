@@ -14,7 +14,7 @@ const deleteBanner = async (id) => {
   return Promise.resolve(Banner.remove({ _id: id }).exec());
 };
 
-const enableDisableBanners = async (id, req) => {
+const enableDisableBanners = async (id, req) => { 
   console.log(id);
   let bannerData = await Banner.findOne({ _id: id }).exec();
 

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const CategoryModel = mongoose.model('gameCategory');
+var CategoryModel = mongoose.model('gameCategory');
 const errors = require('errors/index');
 const { CostExplorer } = require('aws-sdk');
 const validationError = errors.ValidationError;
@@ -7,51 +7,103 @@ const UserModel = mongoose.model('user');
 
 const { awsStorageUploadGameCategory, awsStorageUploadBanner } = require("../../../utils/aws-storage");
 const formidable = require("formidable");
+const multer = require("../../../utils/multer");
 
+// const createCategory = async (req, res) => {
+//     try{
+//         let form = await new formidable.IncomingForm({multiples: true});
+//         form.parse(
+//             req, async (error, fields, files) =>{
+
+//                 if (error) {
+//                     return res.json({
+//                         error: error.message
+//                     });
+//                 }
+
+//                 console.log("files", files);
+
+//                 const categoryDetails = (fields);
+//                 console.log("fileds:", categoryDetails);
+
+//                 const icon = await awsStorageUploadGameCategory(files.icon);
+//                 console.log("icon:", icon);
+
+//                 // const banner = await awsStorageUploadBanner(files.banner);
+//                 // console.log("banner:", banner);
+
+//                 categoryDetails.icon = icon;
+//                 // categoryDetails.banner = banner
+
+//                 const newGameCategory = await CategoryModel(categoryDetails);
+//                 await newGameCategory.save();
+
+//                 return res.status(200).json({
+//                     "message": `game category created succefully`,
+//                     "New-Banner": newGameCategory
+//                 });
+//             } 
+//         );
+//     }
+//     catch(error){
+//         return res.status(500).json(
+//             {
+//                 "message": "somethin went wrong!",
+//                 "error": error.message
+//             }
+//         )
+//     }
+// }
+
+// create game category using multer
 const createCategory = async (req, res) => {
-    try{
-        let form = await new formidable.IncomingForm({multiples: true});
-        form.parse(
-            req, async (error, fields, files) =>{
+    multer.uploadGameCategory(req, res, async (error) => {
 
-                if (error) {
-                    return res.json({
-                        error: error.message
-                    });
-                }
+        console.log("fields", req.body);
+        console.log('files', req.file);
+        // console.log("request", req);
 
-                console.log("files", files);
+        if (error) {
 
-                const categoryDetails = (fields);
-                console.log("fileds:", categoryDetails);
+            console.log('errors', error);
+            return res.status(500).json({
+                status: 'fail',
+                error: error
+            });
 
-                const icon = await awsStorageUploadGameCategory(files.icon);
-                console.log("icon:", icon);
+        } else {
 
-                // const banner = await awsStorageUploadBanner(files.banner);
-                // console.log("banner:", banner);
+            // If File not found
+            if (req.file === undefined) {
+                console.log('uploadProductsImages Error: No File Selected!');
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error: No File Selected'
+                });
+            } else {
 
-                categoryDetails.icon = icon;
-                // categoryDetails.banner = banner
+                // If Success
+                let fields = req.body
+                console.log("Fields:", fields);
 
-                const newGameCategory = await CategoryModel(categoryDetails);
+                let iconFile = req.file;
+                let fileLocation = iconFile.location;
+
+                const newGameCategory = await CategoryModel(
+                    fields,
+                    fields.icon = fileLocation
+                );
                 await newGameCategory.save();
 
+                // Save the file name into database
                 return res.status(200).json({
-                    "message": `game category created succefully`,
-                    "New-Banner": newGameCategory
+                    status: 'ok',
+                    gameCategory: newGameCategory,
                 });
-            } 
-        );
-    }
-    catch(error){
-        return res.status(500).json(
-            {
-                "message": "somethin went wrong!",
-                "error": error.message
+
             }
-        )
-    }
+        }
+    });
 }
 
 
@@ -100,60 +152,124 @@ async function enableDisableCategories(req, res, next) {
     }
 }
 
-const editGameCategory = async (req, res) => {
-    try{
+// const editGameCategory = async (req, res) => {
+//     try{
 
-        const id = req.params.id;
-        
-        const gameCategoryData = await CategoryModel.findByIdAndUpdate(id).exec();
-        
-        let form = await new formidable.IncomingForm({ multiples: true });
+//         const id = req.params.id;
 
-        form.parse(
-            req, async (error, fields, files) => {
+//         const gameCategoryData = await CategoryModel.findByIdAndUpdate(id).exec();
 
-                if (error) {
-                    return res.json({
-                        error: error.message
-                    });
-                }
+//         let form = await new formidable.IncomingForm({ multiples: true });
 
-                console.log("fields:", fields);
-                console.log("files:", files);
+//         form.parse(
+//             req, async (error, fields, files) => {
 
-                const categoryDetails = (fields);
-                console.log("fileds:", categoryDetails);
+//                 if (error) {
+//                     return res.json({
+//                         error: error.message
+//                     });
+//                 }
 
-                const icon = await awsStorageUploadGameCategory(files.icon);
-                console.log("icon:", icon);
+//                 console.log("fields:", fields);
+//                 console.log("files:", files);
 
-                const banner = await awsStorageUploadBanner(files.banner);
-                console.log("banner: ", banner);
+//                 const categoryDetails = (fields);
+//                 console.log("fileds:", categoryDetails);
 
-                gameCategoryData.description = categoryDetails.description;
-                gameCategoryData.icon = icon;
-                gameCategoryData.banner = banner
+//                 const icon = await awsStorageUploadGameCategory(files.icon);
+//                 console.log("icon:", icon);
 
-                console.log("desc: ", categoryDetails.description);
+//                 const banner = await awsStorageUploadBanner(files.banner);
+//                 console.log("banner: ", banner);
 
-                // const updatedGameCategory = await gameCategoryData(categoryDetails);
-                await gameCategoryData.save();
+//                 gameCategoryData.description = categoryDetails.description;
+//                 gameCategoryData.icon = icon;
+//                 gameCategoryData.banner = banner
 
-                return res.status(200).json({
-                    "message": `game category created succefully`,
-                    "New-Banner": gameCategoryData
+//                 console.log("desc: ", categoryDetails.description);
+
+//                 // const updatedGameCategory = await gameCategoryData(categoryDetails);
+//                 await gameCategoryData.save();
+
+//                 return res.status(200).json({
+//                     "message": `game category created succefully`,
+//                     "New-Banner": gameCategoryData
+//                 });
+//             }
+//         );
+
+//     }catch(error){
+//         return res.status(500).json(
+//             {
+//                 "message": "somethin went wrong!",
+//                 "error": error.message
+//             }
+//         )
+//     }
+// }
+
+// edit game category using multer 
+const editGameCategory = async (req, res) => { // not finalized
+
+    // var id = req.params.id;
+    // var gameCategoryData = await CategoryModel.findByIdAndUpdate(id).exec();
+
+    // console.log("id:", id)
+
+    multer.uploadGameCategory(req, res, async (error) => {
+
+        console.log("id", req.params);
+        console.log("fields", req.body);
+        console.log('files', req.file);
+        // console.log("fetch:", gameCategoryData);
+        // console.log("request", req);
+
+        if (error) {
+
+            console.log('errors', error);
+            return res.status(500).json({
+                status: 'fail',
+                error: error
+            });
+
+        } else {
+
+            // If File not found
+            if (req.file === undefined) {
+                console.log('uploadProductsImages Error: No File Selected!');
+                return res.status(500).json({
+                    status: 'fail',
+                    message: 'Error: No File Selected'
                 });
-            }
-        );
+            } else {
 
-    }catch(error){
-        return res.status(500).json(
-            {
-                "message": "somethin went wrong!",
-                "error": error.message
+                // If Success
+                var fields = req.body;
+                // console.log("Fields:", fields);
+
+                var iconFile = req.file;
+                var fileLocation = iconFile.location;
+
+                fields.icon = fileLocation;
+
+                console.log("newF", fields);
+
+                var id = req.params.id;
+                var gameCategoryData = await CategoryModel.findByIdAndUpdate(id, fields);
+                console.log("updated:", gameCategoryData);
+                // var updatedGameCategory = await gameCategoryData(fields);
+                await gameCategoryData.save();
+                // console.log("updated:", updatedGameCategory);
+
+                // Save the file name into database
+                return res.status(200).json({
+                    status: 'ok',
+                    gameCategory: gameCategoryData,
+                });
+
             }
-        )
-    }
+        }
+    });
 }
 
 async function getCategoriesById(req, res, next) {

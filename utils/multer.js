@@ -29,3 +29,76 @@ exports.uploadBanners = multer({
     // }
 
 }).array('banners', 10);
+
+
+
+exports.uploadGameCategory = multer({
+
+    storage: multerS3({
+        s3: s3,
+        // acl: 'public-read',
+        bucket: 'bounty-bunch-game-category',
+        metadata: (req, file, callBack) => {
+            callBack(null, { fieldName: file.fieldname })
+        },
+        key: (req, file, callBack) => {
+            // var fullPath = 'banners/' + file.originalname; //If you want to save into a folder concat de name of the folder to the path
+            var fullPath = file.originalname;
+            callBack(null, fullPath)
+        }
+    }),
+    // limits: { fileSize: 10000000 }, // In bytes: 10000000 bytes = 10 MB
+    // fileFilter: function (req, file, cb) {
+    //     checkFileType(file, cb);
+    // }
+
+}).single('icon');
+
+
+
+
+exports.uploadTournamentImage = multer({
+
+    storage: multerS3({
+        s3: s3,
+        // acl: 'public-read',
+        bucket: 'bounty-bunch-game-category',
+        metadata: (req, file, callBack) => {
+            callBack(null, { fieldName: file.fieldname })
+        },
+        key: (req, file, callBack) => {
+            // var fullPath = 'banners/' + file.originalname; //If you want to save into a folder concat de name of the folder to the path
+            var fullPath = file.originalname;
+            callBack(null, fullPath)
+        }
+    }),
+    limits: { fileSize: 5000000 }, // In bytes: 2000000 bytes = 5 MB
+    // fileFilter: function (req, file, cb) {
+    //     checkFileType(file, cb);
+    // }
+
+}).single('images');
+
+
+
+exports.uploadGameCategory = multer({
+
+    storage: multerS3({
+        s3: s3,
+        // acl: 'public-read',
+        bucket: 'bounty-bunch-game-category',
+        metadata: (req, file, callBack) => {
+            callBack(null, { fieldName: file.fieldname })
+        },
+        key: (req, file, callBack) => {
+            // var fullPath = 'banners/' + file.originalname; //If you want to save into a folder concat de name of the folder to the path
+            var fullPath = file.originalname;
+            callBack(null, fullPath)
+        }
+    }),
+    // limits: { fileSize: 10000000 }, // In bytes: 10000000 bytes = 10 MB
+    // fileFilter: function (req, file, cb) {
+    //     checkFileType(file, cb);
+    // }
+
+}).single('icon');

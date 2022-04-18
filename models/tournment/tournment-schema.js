@@ -157,6 +157,7 @@ let fields = {
         type: Boolean,
         default: true
     },
+    // automate -----------------------------------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     totalBots: {
         type: Number
     },
@@ -202,15 +203,8 @@ let fields = {
     entryFee: Number,
     adminStake: Number,
     pointValue: Number,
-    ////////////////////////////////////////////////
-    users: [
-        {
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'userGame'
-            }
-        }
-    ]
+    /////////////////////////////////////////
+    isCancelled: { type: Boolean, default: false }
 };
 
 let Schema = require('utils/generate-schema')(fields);

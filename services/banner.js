@@ -64,7 +64,7 @@ const CreateBanners = async (req, res) => {
     if (error) {
       
       console.log('errors', error);
-      res.status(500).json({
+      return res.status(500).json({
         status: 'fail',
         error: error
       });
@@ -74,7 +74,7 @@ const CreateBanners = async (req, res) => {
       // If File not found
       if (req.files === undefined) {
         console.log('uploadProductsImages Error: No File Selected!');
-        res.status(500).json({
+        return res.status(500).json({
           status: 'fail',
           message: 'Error: No File Selected'
         });
@@ -94,8 +94,14 @@ const CreateBanners = async (req, res) => {
           images.push(fileLocation)
         }
         
+
+        
+
+
         const newBanner = await addNewBanner(
-          fields, 
+          fields.bannerType = req.body.bannerType || "",
+          fields.gameCategory = req.gameCategory || "",
+          fields.gameName = req.body.gameName || "", 
           fields.banners = images
         );
 

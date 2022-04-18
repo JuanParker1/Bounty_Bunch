@@ -7,10 +7,10 @@ const tournamentTableSchema = new Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'tournment',
         },
-        users: [{
+        userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
-        }]
+        }
     }
 );
 

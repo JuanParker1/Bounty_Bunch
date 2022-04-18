@@ -168,9 +168,7 @@ basicFreeQuizRegistration: async (req, res) => {
                             }, {
 
                                 $push: {
-
                                     table_array: createTable._id
-
                                 },
 
                                 $inc: {
@@ -204,23 +202,14 @@ basicFreeQuizRegistration: async (req, res) => {
                             let fmt = date.format(date1, 'YYYY-MM-DD hh:mm')
 
                             PUSH.playGroundNotification({
-
                                 user: req.query.checkUser._id.toString(),
-
                                 title: `Congratulations.! You've been successfully registered for the tournament on ${fmt}. You shall be informed once the table will full.`,
-
                                 content: `Congratulations.! You've been successfully registered for the tournament on ${fmt}. You shall be informed once the table will full.`,
-
                                 type: 'play_ground_notification'
-
                             })
-
                             return responseMessage.responseHandlerWithData(res, 200, `Registered for quiz sucessfully`, regUser);
-
                         }
-
                     }
-
                 } else {
 
                     if (getQuizInfo.current_table == '') {
