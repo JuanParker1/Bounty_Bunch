@@ -3,6 +3,7 @@ const {
   getBanners,
   deleteBanner,
   enableDisableBanners,
+  getBannersByType
 } = require("../mongoDB/banner");
 
 const { awsStorageUploadBanner } = require("../utils/aws-storage");
@@ -13,45 +14,6 @@ var formidable = require("formidable");
 
 const multer = require("../utils/multer");
 
-// const CreateBanners = async (req, res) => {
-//   try {
-
-//     var form = await new formidable.IncomingForm({ multiples: true });
-//     form.parse(req, async (error, fields, files) => {
-
-//       if (error) {
-//         return res.json({
-//           error: error.message
-//         });
-//       }
-
-//       console.log("fileds", fields);
-//       console.log('files:', files);
-
-//       const bannerDetails = (fields);
-//       console.log('bannerDetailes:', bannerDetails);
-
-//       var filedata = await awsStorageUploadBanner(files.banners);
-//       console.log("filename:", filedata);
-//       bannerDetails.banners = filedata;
-
-//       const newBanner = await addNewBanner(bannerDetails);
-
-//       return res.status(200).json({
-//         "message": `banner added to database successfully`,
-//         "New-Banner": newBanner
-//       });
-
-//     });
-//   } catch (error) {
-//     return res.status(500).json(
-//       {
-//         message: `something went wrong`,
-//         error: error.message
-//       }
-//     )
-//   }
-// };
 
 // create banner using multer
 const CreateBanners = async (req, res) => {
@@ -62,7 +24,6 @@ const CreateBanners = async (req, res) => {
     // console.log("fields:", req.body);
     
     if (error) {
-      
       console.log('errors', error);
       return res.status(500).json({
         status: 'fail',
@@ -70,7 +31,6 @@ const CreateBanners = async (req, res) => {
       });
 
     } else {
-      
       // If File not found
       if (req.files === undefined) {
         console.log('uploadProductsImages Error: No File Selected!');
@@ -94,12 +54,9 @@ const CreateBanners = async (req, res) => {
           images.push(fileLocation)
         }
         
-
-        
-
-
         const newBanner = await addNewBanner(
           fields.bannerType = req.body.bannerType || "",
+          fields.typeId = req.body.typeId || "",
           fields.gameCategory = req.gameCategory || "",
           fields.gameName = req.body.gameName || "", 
           fields.banners = images
@@ -154,10 +111,25 @@ const EnableDisableBanners = async (req, res, next) => {
   }
 };
 
+const GetBannersByType = async (req, res, next) => {
+  try {
+
+    var reqType = req.params.type;
+    console.log("reqType:  >> "+reqType);
+    res.data = await getBannersByType(reqType);
+   
+    next();
+  } catch (ex) {
+    errors.handleException(ex, next);
+  }
+};
+
+
 module.exports = {
   // createBanners,
   CreateBanners,
   GetBanners,
   DeleteBanner,
   EnableDisableBanners,
+  GetBannersByType
 };

@@ -3,6 +3,7 @@ const {
   GetBanners,
   DeleteBanner,
   EnableDisableBanners,
+  GetBannersByType
 } = require("../../../services/banner");
 
 module.exports = [
@@ -30,5 +31,11 @@ module.exports = [
     method: "put",
     allUsers: true,
     controller: EnableDisableBanners,
+  },
+  {
+    path: "/:type/get-banners-by-type",
+    method: "get",
+    allUsers: true,
+    controller: GetBannersByType,
   },
 ];

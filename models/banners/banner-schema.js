@@ -4,7 +4,10 @@ const ObjectId = mongoose.Schema.ObjectId;
 let fields = mongoose.Schema({
     bannerType: {
         type: String,
-        enum: 'GameCategory|GameList|GameLandingPage'.split('|')
+        enum: 'GameCategory|GameList|GameLandingPage|TournamentBanner|Game'.split('|')
+    },
+    typeId: {
+        type: String
     },
     status: {
         type: String,

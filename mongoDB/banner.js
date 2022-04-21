@@ -10,6 +10,12 @@ const getBanners = async () => {
   return Promise.resolve(banner);
 };
 
+const getBannersByType = async (reqQuery) => {
+  console.log("reqQuery:  >> "+reqQuery);
+  const banner = await Banner.find({bannerType:reqQuery});
+  return Promise.resolve(banner);
+};
+
 const deleteBanner = async (id) => {
   return Promise.resolve(Banner.remove({ _id: id }).exec());
 };
@@ -28,4 +34,5 @@ module.exports = {
   getBanners,
   deleteBanner,
   enableDisableBanners,
+  getBannersByType
 };
