@@ -477,12 +477,12 @@ const tournamentUserRegister = async (req, res) => {
                         status: 'fail',
                         message: 'max player limit reached'
                     });
-                } else {
-                   // if false tournament initial registration end date and time is passed then throw response that tournament registration is complete. and show the alternate, date and time to register.    
+                } 
+                // else if() {}
 
 
-
-                //    add user in array 
+                else{
+                     //    add user in array 
 
                 const updateInTournament = TournmentModel.findByIdAndUpdate(userId, {users: userId});
                 return res.status(200).json({
@@ -490,10 +490,16 @@ const tournamentUserRegister = async (req, res) => {
                     message: 'You are added in the tournament.'
                 });
                 }
+                   // if false tournament initial registration end date and time is passed then throw response that tournament registration is complete. and show the alternate, date and time to register.    
+
+
+
+               
+                }
             }
             
-        }
-        //user id insert into array
+        
+        
         // alternate new tournament if minimum player not fulfilled 
 
        

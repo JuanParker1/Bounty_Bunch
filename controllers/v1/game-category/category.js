@@ -9,51 +9,6 @@ const { awsStorageUploadGameCategory, awsStorageUploadBanner } = require("../../
 const formidable = require("formidable");
 const multer = require("../../../utils/multer");
 
-// const createCategory = async (req, res) => {
-//     try{
-//         let form = await new formidable.IncomingForm({multiples: true});
-//         form.parse(
-//             req, async (error, fields, files) =>{
-
-//                 if (error) {
-//                     return res.json({
-//                         error: error.message
-//                     });
-//                 }
-
-//                 console.log("files", files);
-
-//                 const categoryDetails = (fields);
-//                 console.log("fileds:", categoryDetails);
-
-//                 const icon = await awsStorageUploadGameCategory(files.icon);
-//                 console.log("icon:", icon);
-
-//                 // const banner = await awsStorageUploadBanner(files.banner);
-//                 // console.log("banner:", banner);
-
-//                 categoryDetails.icon = icon;
-//                 // categoryDetails.banner = banner
-
-//                 const newGameCategory = await CategoryModel(categoryDetails);
-//                 await newGameCategory.save();
-
-//                 return res.status(200).json({
-//                     "message": `game category created succefully`,
-//                     "New-Banner": newGameCategory
-//                 });
-//             } 
-//         );
-//     }
-//     catch(error){
-//         return res.status(500).json(
-//             {
-//                 "message": "somethin went wrong!",
-//                 "error": error.message
-//             }
-//         )
-//     }
-// }
 
 // create game category using multer
 const createCategory = async (req, res) => {
@@ -118,8 +73,18 @@ async function getCategories(req, res, next) {
         }
         console.log(query)
         res.data = await CategoryModel.find(query).exec();
-        console.log(res.data)
-        next();
+        
+        console.log("res.data:>> "+res.data);
+       if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -131,7 +96,16 @@ async function deleteCategories(req, res, next) {
             throw new validationError("enter valid id");
         }
         res.data = await CategoryModel.remove({ _id: req.params.id }).exec();
-        next();
+       if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -146,67 +120,22 @@ async function enableDisableCategories(req, res, next) {
         categoryData.status = req.body.enable ? "Active" : "Inactive";
         categoryData.enable = req.body.enable;
         res.data = await categoryData.save();
-        next();
+       if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
     } catch (ex) {
         errors.handleException(ex, next);
     }
 }
 
-// const editGameCategory = async (req, res) => {
-//     try{
 
-//         const id = req.params.id;
-
-//         const gameCategoryData = await CategoryModel.findByIdAndUpdate(id).exec();
-
-//         let form = await new formidable.IncomingForm({ multiples: true });
-
-//         form.parse(
-//             req, async (error, fields, files) => {
-
-//                 if (error) {
-//                     return res.json({
-//                         error: error.message
-//                     });
-//                 }
-
-//                 console.log("fields:", fields);
-//                 console.log("files:", files);
-
-//                 const categoryDetails = (fields);
-//                 console.log("fileds:", categoryDetails);
-
-//                 const icon = await awsStorageUploadGameCategory(files.icon);
-//                 console.log("icon:", icon);
-
-//                 const banner = await awsStorageUploadBanner(files.banner);
-//                 console.log("banner: ", banner);
-
-//                 gameCategoryData.description = categoryDetails.description;
-//                 gameCategoryData.icon = icon;
-//                 gameCategoryData.banner = banner
-
-//                 console.log("desc: ", categoryDetails.description);
-
-//                 // const updatedGameCategory = await gameCategoryData(categoryDetails);
-//                 await gameCategoryData.save();
-
-//                 return res.status(200).json({
-//                     "message": `game category created succefully`,
-//                     "New-Banner": gameCategoryData
-//                 });
-//             }
-//         );
-
-//     }catch(error){
-//         return res.status(500).json(
-//             {
-//                 "message": "somethin went wrong!",
-//                 "error": error.message
-//             }
-//         )
-//     }
-// }
 
 // edit game category using multer 
 const editGameCategory = async (req, res) => { // not finalized
@@ -278,7 +207,16 @@ async function getCategoriesById(req, res, next) {
             throw new validationError("Send Valid Id")
         }
         res.data = await CategoryModel.findOne({ _id: req.params.id }).exec();
-        next();
+       if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -290,7 +228,16 @@ async function getCategoriesByName(req, res, next) {
             throw new validationError("Send Valid Name")
         }
         res.data = await CategoryModel.find({ name: req.params.name }).exec();
-        next();
+       if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
     } catch (ex) {
         errors.handleException(ex, next);
     }

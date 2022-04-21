@@ -103,7 +103,16 @@ const GetGames = async (req, res, next) => {
     //   query.gameStatus = req.query.status;
     // }
     res.data = await getGames(query);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -116,7 +125,26 @@ const GetGamesByGameCategory = async (req, res, next) => {
     //   query.gameCategoryId = req.query.gameCategoryId;
     // }
     res.data = await getGamesByGameCategory(req.query.gameCategoryId);
-    next();
+    console.log("res.data:>> "+res.data);
+    if(res.data.length > 0){
+      if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -125,7 +153,21 @@ const GetGamesByGameCategory = async (req, res, next) => {
 const GetGamesIdName = async (req, res, next) => {
   try {
     res.data = await getGamesIdName();
-    next();
+    
+      if(res.data.length > 0){
+      next();
+   
+  
+   
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
+
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -134,7 +176,16 @@ const GetGamesIdName = async (req, res, next) => {
 const GetSinglePlayerGames = async (req, res, next) => {
   try {
     res.data = await getSinglePlayerGames();
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -143,7 +194,16 @@ const GetSinglePlayerGames = async (req, res, next) => {
 const GetMultiPlayerGames = async (req, res, next) => {
   try {
     res.data = await getMultiPlayerGames();
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -152,7 +212,16 @@ const GetMultiPlayerGames = async (req, res, next) => {
 const GetGameById = async (req, res, next) => {
   try {
     res.data = await getGameById(req);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -160,7 +229,16 @@ const GetGameById = async (req, res, next) => {
 const GetGamesByName = async (req, res, next) => {
   try {
     res.data = await getGamesByName(req);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -169,7 +247,16 @@ const GetGamesByName = async (req, res, next) => {
 const GameResults = async (req, res, next) => {
   try {
     res.data = await gameResults(req);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -181,7 +268,16 @@ const DeleteGame = async (req, res, next) => {
       throw new validationError("enter valid id");
     }
     res.data = await deleteGame(req);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -193,7 +289,16 @@ const GetGamesByCategory = async (req, res, next) => {
       throw new validationError("enter valid categoryId");
     }
     res.data = await getGamesByCategory(req);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -206,7 +311,16 @@ const EnableDisableGames = async (req, res, next) => {
     }
 
     res.data = await enableDisableGames(req);
-    next();
+    if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
+   
   } catch (ex) {
     errors.handleException(ex, next);
   }
