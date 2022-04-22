@@ -156,9 +156,6 @@ const GetGamesIdName = async (req, res, next) => {
     
       if(res.data.length > 0){
       next();
-   
-  
-   
     }
     else{
       res.status(404).json({

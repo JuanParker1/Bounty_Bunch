@@ -79,7 +79,15 @@ const CreateBanners = async (req, res) => {
 const GetBanners = async (req, res, next) => {
   try {
     res.data = await getBanners();
-    next();
+      if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -91,7 +99,15 @@ const DeleteBanner = async (req, res, next) => {
       throw new validationError("enter valid id");
     }
     res.data = await deleteBanner(req.params.id);
-    next();
+      if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -105,7 +121,15 @@ const EnableDisableBanners = async (req, res, next) => {
     }
 
     res.data = await enableDisableBanners(req.params.id, req);
-    next();
+      if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
   } catch (ex) {
     errors.handleException(ex, next);
   }
@@ -118,7 +142,15 @@ const GetBannersByType = async (req, res, next) => {
     console.log("reqType:  >> "+reqType);
     res.data = await getBannersByType(reqType);
    
-    next();
+      if(res.data.length > 0){
+      next();
+    }
+    else{
+      res.status(404).json({
+        status: 'fail',
+        message: 'no data'
+    });
+    }
   } catch (ex) {
     errors.handleException(ex, next);
   }
