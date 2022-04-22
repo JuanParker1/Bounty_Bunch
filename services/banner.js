@@ -18,15 +18,15 @@ const multer = require("../utils/multer");
 // create banner using multer
 const CreateBanners = async (req, res) => {
   multer.uploadBanners(req, res, async (error) => {
-    
+
     console.log("fields", req.body);
     console.log('files', req.files);
     // console.log("fields:", req.body);
-    
+
     if (error) {
       console.log('errors', error);
       return res.status(500).json({
-        status: 'fail',
+        status: 201,
         error: error
       });
 
@@ -35,11 +35,11 @@ const CreateBanners = async (req, res) => {
       if (req.files === undefined) {
         console.log('uploadProductsImages Error: No File Selected!');
         return res.status(500).json({
-          status: 'fail',
+          status: 201,
           message: 'Error: No File Selected'
         });
       } else {
-        
+
         // If Success
         let fields = req.body
         console.log("bannerFields:", fields);
@@ -53,19 +53,19 @@ const CreateBanners = async (req, res) => {
           console.log('filename:', fileLocation);
           images.push(fileLocation)
         }
-        
+
         const newBanner = await addNewBanner(
           fields.bannerType = req.body.bannerType || "",
           fields.typeId = req.body.typeId || "",
           fields.gameCategory = req.gameCategory || "",
-          fields.gameName = req.body.gameName || "", 
+          fields.gameName = req.body.gameName || "",
           fields.banners = images
         );
 
         // Save the file name into database
         return res.status(200).json({
           status: 'ok',
-          banners : newBanner,
+          banners: newBanner,
           // filesArray: bannerFileArray,
           // locationArray: images
         });
@@ -78,15 +78,19 @@ const CreateBanners = async (req, res) => {
 
 const GetBanners = async (req, res, next) => {
   try {
-    res.data = await getBanners();
-      if(res.data.length > 0){
-      next();
+    var data = await getBanners();
+    if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
   } catch (ex) {
     errors.handleException(ex, next);
@@ -98,15 +102,19 @@ const DeleteBanner = async (req, res, next) => {
     if (!req.params.id) {
       throw new validationError("enter valid id");
     }
-    res.data = await deleteBanner(req.params.id);
-      if(res.data.length > 0){
-      next();
+    var data = await deleteBanner(req.params.id);
+    if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
   } catch (ex) {
     errors.handleException(ex, next);
@@ -120,15 +128,19 @@ const EnableDisableBanners = async (req, res, next) => {
       throw new validationError("enter valid id");
     }
 
-    res.data = await enableDisableBanners(req.params.id, req);
-      if(res.data.length > 0){
-      next();
+    var data = await enableDisableBanners(req.params.id, req);
+    if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
   } catch (ex) {
     errors.handleException(ex, next);
@@ -139,17 +151,22 @@ const GetBannersByType = async (req, res, next) => {
   try {
 
     var reqType = req.params.type;
-    console.log("reqType:  >> "+reqType);
-    res.data = await getBannersByType(reqType);
-   
-      if(res.data.length > 0){
-      next();
+    console.log("reqType:  >> " + reqType);
+    var data = await getBannersByType(reqType);
+
+
+    if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
   } catch (ex) {
     errors.handleException(ex, next);

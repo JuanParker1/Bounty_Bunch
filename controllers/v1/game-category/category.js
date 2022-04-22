@@ -73,18 +73,22 @@ async function getCategories(req, res, next) {
         }
         console.log(query)
         res.data = await CategoryModel.find(query).exec();
-        
-        console.log("res.data:>> "+res.data);
-       if(res.data.length > 0){
-      next();
+
+        console.log("res.data:>> " + res.data);
+       if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
-   
+
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -96,16 +100,20 @@ async function deleteCategories(req, res, next) {
             throw new validationError("enter valid id");
         }
         res.data = await CategoryModel.remove({ _id: req.params.id }).exec();
-       if(res.data.length > 0){
-      next();
+       if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
-   
+
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -120,16 +128,20 @@ async function enableDisableCategories(req, res, next) {
         categoryData.status = req.body.enable ? "Active" : "Inactive";
         categoryData.enable = req.body.enable;
         res.data = await categoryData.save();
-       if(res.data.length > 0){
-      next();
+       if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
-   
+
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -207,16 +219,20 @@ async function getCategoriesById(req, res, next) {
             throw new validationError("Send Valid Id")
         }
         res.data = await CategoryModel.findOne({ _id: req.params.id }).exec();
-       if(res.data.length > 0){
-      next();
+       if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
-   
+
     } catch (ex) {
         errors.handleException(ex, next);
     }
@@ -228,16 +244,20 @@ async function getCategoriesByName(req, res, next) {
             throw new validationError("Send Valid Name")
         }
         res.data = await CategoryModel.find({ name: req.params.name }).exec();
-       if(res.data.length > 0){
-      next();
+       if (data.length > 0) {
+      res.status(200).json({
+        status: 200,
+        message: 'data present',
+        data: data
+      });
     }
-    else{
+    else {
       res.status(404).json({
-        status: 'fail',
+        status: 201,
         message: 'no data'
-    });
+      });
     }
-   
+
     } catch (ex) {
         errors.handleException(ex, next);
     }

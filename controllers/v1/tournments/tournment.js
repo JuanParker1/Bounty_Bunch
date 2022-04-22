@@ -11,56 +11,6 @@ const formidable = require("formidable");
 
 const multer = require("../../../utils/multer");
 
-// create tournament function using formidable
-// const createTournment = async (req, res) => {
-//     try {
-// 
-//         const form = await new formidable.IncomingForm({ multiples: true });
-//         form.parse(req, async (error, fields, files) => {
-
-//             if (error) {
-//                 return res.json({
-//                     error: error.message
-//                 });
-//             }
-//             console.log("fields:", fields);
-//             console.log("files:", files);
-
-//             const tournamentDetails = (fields);
-//             // console.log('tournamentDetailes:', tournamentDetails);
-
-//             const image = await awsStorageUploadImage(files.tableImage);
-//             // console.log("tableImage:", image);
-//             tournamentDetails.tableImage = image;
-
-//             const newTournament = await TournmentModel(tournamentDetails);
-
-//             if (newTournament.error) {
-//                 return res.status(400).json(
-//                     {
-//                         message: newTournament.error.message
-//                     }
-//                 )
-//             }
-
-//             await newTournament.save();
-
-//             return res.status(200).json({
-//                 "message": `Tournament added to database successfully`,
-//                 "New-Tournament": newTournament
-//             });
-
-//         });
-//     } catch (error) {
-//         return res.status(500).json(
-//             {
-//                 message: `something went wrong`,
-//                 error: error.message
-//             }
-//         )
-//     }
-// }
-
 
 
 // create Tournment using multer
