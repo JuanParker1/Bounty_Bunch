@@ -72,14 +72,14 @@ async function getCategories(req, res, next) {
             query.status = 'Active'
         }
         console.log(query)
-        res.data = await CategoryModel.find(query).exec();
+        var data = await CategoryModel.find(query).exec();
 
         console.log("res.data:>> " + res.data);
        if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        "data": data
       });
     }
     else {
@@ -99,12 +99,12 @@ async function deleteCategories(req, res, next) {
         if (!req.params.id) {
             throw new validationError("enter valid id");
         }
-        res.data = await CategoryModel.remove({ _id: req.params.id }).exec();
+        var data = await CategoryModel.remove({ _id: req.params.id }).exec();
        if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        "data": data
       });
     }
     else {
@@ -127,12 +127,12 @@ async function enableDisableCategories(req, res, next) {
         let categoryData = await CategoryModel.findOne({ _id: req.params.id }).exec();
         categoryData.status = req.body.enable ? "Active" : "Inactive";
         categoryData.enable = req.body.enable;
-        res.data = await categoryData.save();
+        var data = await categoryData.save();
        if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        "data": data
       });
     }
     else {
@@ -218,12 +218,13 @@ async function getCategoriesById(req, res, next) {
         if (!req.params.id) {
             throw new validationError("Send Valid Id")
         }
-        res.data = await CategoryModel.findOne({ _id: req.params.id }).exec();
+        var data = await CategoryModel.findOne({ _id: req.params.id }).exec();
+        console.log(data);
        if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        "data": data
       });
     }
     else {
@@ -243,12 +244,12 @@ async function getCategoriesByName(req, res, next) {
         if (!req.params.name) {
             throw new validationError("Send Valid Name")
         }
-        res.data = await CategoryModel.find({ name: req.params.name }).exec();
+        var data = await CategoryModel.find({ name: req.params.name }).exec();
        if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        "data": data
       });
     }
     else {

@@ -102,12 +102,12 @@ const GetGames = async (req, res, next) => {
     // if (req.query.status !== 'undefined') {
     //   query.gameStatus = req.query.status;
     // }
-    res.data = await getGames(query);
+    var data = await getGames(query);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -128,7 +128,7 @@ const GetGamesByGameCategory = async (req, res, next) => {
     // if (req.query.gameCategoryId) {
     //   query.gameCategoryId = req.query.gameCategoryId;
     // }
-    res.data = await getGamesByGameCategory(req.query.gameCategoryId);
+    var data = await getGamesByGameCategory(req.query.gameCategoryId);
     console.log("res.data:>> " + res.data);
     if (res.data.length > 0) {
       if (res.data.length > 0) {
@@ -156,13 +156,13 @@ const GetGamesByGameCategory = async (req, res, next) => {
 
 const GetGamesIdName = async (req, res, next) => {
   try {
-    res.data = await getGamesIdName();
+    var data = await getGamesIdName();
 
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -180,12 +180,12 @@ const GetGamesIdName = async (req, res, next) => {
 
 const GetSinglePlayerGames = async (req, res, next) => {
   try {
-    res.data = await getSinglePlayerGames();
+    var data = await getSinglePlayerGames();
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -202,12 +202,12 @@ const GetSinglePlayerGames = async (req, res, next) => {
 
 const GetMultiPlayerGames = async (req, res, next) => {
   try {
-    res.data = await getMultiPlayerGames();
+    var data = await getMultiPlayerGames();
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -224,12 +224,12 @@ const GetMultiPlayerGames = async (req, res, next) => {
 
 const GetGameById = async (req, res, next) => {
   try {
-    res.data = await getGameById(req);
+    var data = await getGameById(req);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -245,12 +245,12 @@ const GetGameById = async (req, res, next) => {
 };
 const GetGamesByName = async (req, res, next) => {
   try {
-    res.data = await getGamesByName(req);
+    var data = await getGamesByName(req);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -267,12 +267,12 @@ const GetGamesByName = async (req, res, next) => {
 
 const GameResults = async (req, res, next) => {
   try {
-    res.data = await gameResults(req);
+    var data = await gameResults(req);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -292,12 +292,12 @@ const DeleteGame = async (req, res, next) => {
     if (!req.params.id) {
       throw new validationError("enter valid id");
     }
-    res.data = await deleteGame(req);
+    var data = await deleteGame(req);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -317,12 +317,12 @@ const GetGamesByCategory = async (req, res, next) => {
     if (!req.params.id) {
       throw new validationError("enter valid categoryId");
     }
-    res.data = await getGamesByCategory(req);
+    var data = await getGamesByCategory(req);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
@@ -343,12 +343,12 @@ const EnableDisableGames = async (req, res, next) => {
       throw new validationError("enter valid id");
     }
 
-    res.data = await enableDisableGames(req);
+    var data = await enableDisableGames(req);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,
         message: 'data present',
-        data: data
+        'data': data
       });
     }
     else {
