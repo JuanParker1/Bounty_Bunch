@@ -75,19 +75,20 @@ async function getCategories(req, res, next) {
         var data = await CategoryModel.find(query).exec();
 
         console.log("res.data:>> " + res.data);
-       if (data.length > 0) {
-      res.status(200).json({
-        status: 200,
-        message: 'data present',
-        "data": data
-      });
-    }
-    else {
-      res.status(404).json({
-        status: 201,
-        message: 'no data'
-      });
-    }
+         if (data.length === 0) {
+           
+            return res.status(200).json({
+                status: 201,
+                message: 'no data'
+            });
+        }
+        else {
+            return res.status(200).json({
+                status: 200,
+                message: 'data present',
+                "data": data
+            });
+        }
 
     } catch (ex) {
         errors.handleException(ex, next);
@@ -100,19 +101,20 @@ async function deleteCategories(req, res, next) {
             throw new validationError("enter valid id");
         }
         var data = await CategoryModel.remove({ _id: req.params.id }).exec();
-       if (data.length > 0) {
-      res.status(200).json({
-        status: 200,
-        message: 'data present',
-        "data": data
-      });
-    }
-    else {
-      res.status(404).json({
-        status: 201,
-        message: 'no data'
-      });
-    }
+         if (data.length === 0) {
+           
+            return res.status(200).json({
+                status: 201,
+                message: 'no data'
+            });
+        }
+        else {
+            return res.status(200).json({
+                status: 200,
+                message: 'data present',
+                "data": data
+            });
+        }
 
     } catch (ex) {
         errors.handleException(ex, next);
@@ -128,19 +130,20 @@ async function enableDisableCategories(req, res, next) {
         categoryData.status = req.body.enable ? "Active" : "Inactive";
         categoryData.enable = req.body.enable;
         var data = await categoryData.save();
-       if (data.length > 0) {
-      res.status(200).json({
-        status: 200,
-        message: 'data present',
-        "data": data
-      });
-    }
-    else {
-      res.status(404).json({
-        status: 201,
-        message: 'no data'
-      });
-    }
+         if (data.length === 0) {
+           
+            return res.status(200).json({
+                status: 201,
+                message: 'no data'
+            });
+        }
+        else {
+            return res.status(200).json({
+                status: 200,
+                message: 'data present',
+                "data": data
+            });
+        }
 
     } catch (ex) {
         errors.handleException(ex, next);
@@ -220,19 +223,21 @@ async function getCategoriesById(req, res, next) {
         }
         var data = await CategoryModel.findOne({ _id: req.params.id }).exec();
         console.log(data);
-       if (data.length > 0) {
-      res.status(200).json({
-        status: 200,
-        message: 'data present',
-        "data": data
-      });
-    }
-    else {
-      res.status(404).json({
-        status: 201,
-        message: 'no data'
-      });
-    }
+        
+        if (data.length === 0) {
+           
+            return res.status(200).json({
+                status: 201,
+                message: 'no data'
+            });
+        }
+        else {
+            return res.status(200).json({
+                status: 200,
+                message: 'data present',
+                "data": data
+            });
+        }
 
     } catch (ex) {
         errors.handleException(ex, next);
@@ -245,19 +250,20 @@ async function getCategoriesByName(req, res, next) {
             throw new validationError("Send Valid Name")
         }
         var data = await CategoryModel.find({ name: req.params.name }).exec();
-       if (data.length > 0) {
-      res.status(200).json({
-        status: 200,
-        message: 'data present',
-        "data": data
-      });
-    }
-    else {
-      res.status(404).json({
-        status: 201,
-        message: 'no data'
-      });
-    }
+         if (data.length === 0) {
+           
+            return res.status(200).json({
+                status: 201,
+                message: 'no data'
+            });
+        }
+        else {
+            return res.status(200).json({
+                status: 200,
+                message: 'data present',
+                "data": data
+            });
+        }
 
     } catch (ex) {
         errors.handleException(ex, next);

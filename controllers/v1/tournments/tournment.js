@@ -168,50 +168,7 @@ async function deleteTournment(req, res, next) {
     }
 }
 
-// const editTournment = async (req, res) => {
-// 
-//     try {
-//         const tournment = await TournmentModel.findByIdAndUpdate(req.params.id).exec();
 
-//         const form = await new formidable.IncomingForm({ multiples: true });
-//         form.parse(req, async (error, fields, files) => {
-
-//             if (error) {
-//                 return res.json({
-//                     error: error.message
-//                 });
-//             }
-
-//             console.log("fields:", fields);
-//             console.log("files:", files);
-
-//             const tournamentDetails = (fields);
-//             // console.log('tournamentDetailes:', tournamentDetails);
-
-//             const image = await awsStorageUploadImage(files.tableImage);
-//             // console.log("tableImage:", image);
-//             tournment.banners = image;
-
-//             const updatedTournament = await tournment(tournamentDetails);
-
-//             await updatedTournament.save();
-
-//             return res.status(200).json({
-//                 "message": `tournament updated successfully`,
-//                 "Updated-Tournament": updatedTournament
-//             });
-
-//         });
-//     } catch (error) {
-//         return res.status(500).json(
-//             {
-//                 message: `something went wrong`,
-//                 error: error.message
-//             }
-//         )
-//     }
-
-// };
 
 
 
@@ -281,98 +238,12 @@ const editTournment = async (req, res) => {
                 message: `something went wrong`,
                 error: error.message
             }
-        )
+        );
     }
 
 };
 
 
-// update tournmanet 
-// const tournamentUpdate = async (req, res) => {
-//     try { 
-//         // check tournament user limit has reached?
-//         // assing bots to the tournmant if user limit has been reached.
-//         // if tournament user and bot limit not reached then cancel the tournament.
-
-//     } catch (error) { 
-//         return res.status(500).json(
-//             {
-//                 message: `something went wrong`,
-//                 error: error.message
-//             }
-//         )
-//     }
-// }
-
-// tournament user Register
-// const tournamentUserRegister = async (req, res) => {
-//     //  TODO --
-//     try {
-//         // fetch tournament's and user's Id's 
-//         const tournamentId = req.params.tournamentId
-//         const userId = req.params.tournamentId
-
-//         // check tournament is active or cancelled
-//         const tournamentCheck = await TournmentModel.findById(tournamentId);
-//         console.log("Tournament Model:", tournamentCheck);
-//         // if(!tournamentCheck){
-//         //     return res.status(400).json(
-//         //         {
-//         //             message: "Tournament Does Not Exists"
-//         //         }
-//         //     )
-//         // }else if(tournamentCheck.isCancelled){
-//         //     return res.status(400).json(
-//         //         {
-//         //             message: "Tournament is Cancelled"
-//         //         }
-//         //     )
-//         // }
-
-//         // if pass then follow next step, if fail then return
-//         const userCheck = await UserModel.findById(userId);
-//         console.log("User Model:", userCheck);
-
-//         // TODO check if user exists in the database.
-
-//         //TODO check if tournament exists in the database.
-//         // if pass then follow the next step and if fails then throw an issue response.
-
-//         // TODO check if tournament and user is registered in the tournamentUserTable. [mongo find with query userId and tournamentId]
-//         // if yes response => user registerd with the tournament 
-
-//         // if false then follow the validation step and if true then throw the issue response
-
-
-
-//     // 1. fetch all the document by tournamentId in tournamentTable
-//     // 2 get count 
-//     // 3 get size of tournament from tournamentId
-//     // 4 if equal -> [
-
-//     // ] 
-
-
-
-
-
-
-
-//         // check if the users registered with the tournament has reached the minimum limit. mentioned in the tournament.
-//         // if true then throw response that tournament has reached its user intake limit.
-//         // if false tournament initial registration end date and time is passed then throw response that tournament registration is complete. and show the alternate, date and time to register.
-//         // if tournament alternate start date and time is passed then throw response that tournament registration is closed.
-
-
-//     } catch (error) {
-//         return res.status(500).json(
-//             {
-//                 message: `something went wrong`,
-//                 error: error.message
-//             }
-//         )
-//     }
-// };
 
 
 

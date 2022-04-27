@@ -4,6 +4,7 @@
         "tokenLife": 7200
     },
     "mongoose": {
+        
         "uri": "mongodb+srv://admin:EZ4nBUSTTC6Zmrrd@cluster0.9n3ns.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
         "options": {
             "useNewUrlParser": true,
@@ -17,3 +18,5 @@
     },
     "env": "development"
 }
+
+

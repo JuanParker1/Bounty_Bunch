@@ -314,10 +314,8 @@ const DeleteGame = async (req, res, next) => {
 
 const GetGamesByCategory = async (req, res, next) => {
   try {
-    if (!req.params.id) {
-      throw new validationError("enter valid categoryId");
-    }
-    var data = await getGamesByCategory(req);
+    var categoryId = req.params.id;
+    var data = await getGamesByCategory(categoryId);
     if (data.length > 0) {
       res.status(200).json({
         status: 200,

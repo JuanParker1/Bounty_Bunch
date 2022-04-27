@@ -72,7 +72,7 @@ exports.uploadTournamentImage = multer({
             callBack(null, fullPath)
         }
     }),
-    limits: { fileSize: 5000000 }, // In bytes: 2000000 bytes = 5 MB
+    // limits: { fileSize: 5000000 }, // In bytes: 2000000 bytes = 5 MB
     // fileFilter: function (req, file, cb) {
     //     checkFileType(file, cb);
     // }
